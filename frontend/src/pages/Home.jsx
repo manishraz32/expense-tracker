@@ -25,7 +25,7 @@ const Home = () => {
           <p class="text-sm font-semibold">Filters</p>
           <p class="text-sm text-gray-450">Reset Filters</p>
         </div>
-        <div className="flex flex-col w-full md:flex-col gap-2">
+        <div className="flex flex-col w-full  lg:flex-row gap-2">
           <div className="w-full flex flex-col">
             <label class="text-sm text-gray-450 mb-1">By Category</label>
             <AutocompleteWithCheckbox />
@@ -63,26 +63,58 @@ const Home = () => {
           <p className="text-[24px] font-semibold text-[#12C48B] tracking-wider min-w-[240px]">$ 13700000.00</p>
         </div>
       </div>
-      <div className="bg-white rounded-lg p-[15px]">
+      <div className="bg-white rounded-lg p-[15px] flex flex-col gap-2">
         <div className="flex justify-between">
           <p class="text-sm text-gray-925">Sept 16, 2024</p>
           <p class="text-sm text-gray-550 font-bold">37000</p>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center">
-            <div className="left flex items-center gap-[2px]">
+            <div className="left flex items-center gap-[4px]">
               <div className="avatar placeholder">
                 <div className="bg-neutral text-neutral-content w-8 rounded-full">
                   <span className="text-xs">UI</span>
                 </div>
               </div>
-              <div>
-                <p className="text-sm text-gray-925">Gift</p>
-                <p>chip</p>
+              <div class="flex flex-col gap-1">
+                <p className="text-gray-925 text-sm leading-5">Gift</p>
+                <p className="px-2 text-xs bg-gray-25 rounded-full">chip</p>
               </div>
             </div>
             <div className="right">
-              <p>+1200.0 usd</p>
+              <p className="text-sm font-bold text-green-app">+1200.0 USD</p>
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <div className="left flex items-center gap-[4px]">
+              <div className="avatar placeholder">
+                <div className="bg-neutral text-neutral-content w-8 rounded-full">
+                  <span className="text-xs">UI</span>
+                </div>
+              </div>
+              <div class="flex flex-col gap-1">
+                <p className="text-gray-925 text-sm leading-5">Gift</p>
+                <p className="px-2 text-xs bg-gray-25 rounded-full">chip</p>
+              </div>
+            </div>
+            <div className="right">
+              <p className="text-sm font-bold text-green-app">+1200.0 USD</p>
+            </div>
+          </div>
+          <div className="flex justify-between items-center">
+            <div className="left flex items-center gap-[4px]">
+              <div className="avatar placeholder">
+                <div className="bg-neutral text-neutral-content w-8 rounded-full">
+                  <span className="text-xs">UI</span>
+                </div>
+              </div>
+              <div class="flex flex-col gap-1">
+                <p className="text-gray-925 text-sm leading-5">Gift</p>
+                <p className="px-2 text-xs bg-gray-25 rounded-full">chip</p>
+              </div>
+            </div>
+            <div className="right">
+              <p className="text-sm font-bold text-green-app">+1200.0 USD</p>
             </div>
           </div>
         </div>

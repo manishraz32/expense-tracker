@@ -12,7 +12,7 @@ function App() {
       <Navbar />
 
       {/* Main Content */}
-      <main className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA]">
+      <main className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
         <Home />
       </main>
 

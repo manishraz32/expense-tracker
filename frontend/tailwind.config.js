@@ -14,7 +14,7 @@ export default {
         'sm': '640px',
          // => @media (min-width: 640px) { ... }
         'md': '600px',
-        'lg': '1024px',
+        'lg': '900px',
         'xl': '1280px',
         '2xl': '1536px',
       },
@@ -25,6 +25,7 @@ export default {
           light: '#bbbbcc',   // Light shade of gray
           dark: '#888899',    // Dark shade of gray
           // Add more shades as needed
+          25: '#e5ebee',
           50: '#f9fafb',
           100: '#f3f4f6',
           200: '#e5e7eb',
@@ -38,6 +39,25 @@ export default {
           800: '#1f2937',
           900: '#111827',
           925: '#324c5b',
+        },
+        green: {
+          DEFAULT: '#22c55e', // Custom green color
+          light: '#86efac',   // Light shade of green
+          dark: '#166534',    // Dark shade of green
+          app: '#2dba75',
+          50: '#dcfce7',
+          100: '#bbf7d0',
+          200: '#86efac',
+          300: '#4ade80',
+          400: '#22c55e',
+          450: '#20b855',     // Custom intermediate green
+          500: '#16a34a',
+          550: '#159040',     // Another custom shade between 500 and 600
+          600: '#15803d',
+          700: '#166534',
+          800: '#14532d',
+          900: '#134e2b',
+          925: '#0f3e22',     // Custom very dark shade of green
         },
       },
       spacing: {
