@@ -1,9 +1,7 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
+import { Routes, Route } from 'react-router-dom';
+import Overview from './pages/Overview';
 
 function App() {
   return (
@@ -13,7 +11,11 @@ function App() {
 
       {/* Main Content */}
       <main className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
-        <Home />
+        <Routes>
+          {/* Define your routes here */}
+          <Route path="/" element={<Home />} />
+          <Route path="/overview" element={<Overview />} />
+        </Routes>
       </main>
 
       {/* Footer */}
@@ -26,5 +28,4 @@ function App() {
   );
 }
 
-
-export default App
+export default App;
