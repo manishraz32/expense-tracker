@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        'custom': 'rgba(0, 0, 0, 0.15) 0px 2px 8px',
+      },
       fontFamily: {
         sans: ['"Open Sans"', 'ui-sans-serif', 'system-ui'],
       },
@@ -45,6 +48,7 @@ export default {
           light: '#86efac',   // Light shade of green
           dark: '#166534',    // Dark shade of green
           app: '#2dba75',
+          button: '#12c48b',
           50: '#dcfce7',
           100: '#bbf7d0',
           200: '#86efac',
@@ -54,6 +58,7 @@ export default {
           500: '#16a34a',
           550: '#159040',     // Another custom shade between 500 and 600
           600: '#15803d',
+          650: '#1acb82',
           700: '#166534',
           800: '#14532d',
           900: '#134e2b',

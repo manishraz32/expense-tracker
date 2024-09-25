@@ -2,6 +2,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import { Routes, Route } from 'react-router-dom';
 import Overview from './pages/Overview';
+import BudgetPage from './pages/BudgetPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           {/* Define your routes here */}
           <Route path="/" element={<Home />} />
           <Route path="/overview" element={<Overview />} />
+          <Route path="/budgets" element={<BudgetPage />} />
         </Routes>
       </main>
 
