@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import { Routes, Route } from 'react-router-dom';
 import Overview from './pages/Overview';
 import BudgetPage from './pages/BudgetPage';
+import WalletPage from './pages/WalletPage';
 
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/overview" element={<Overview />} />
           <Route path="/budgets" element={<BudgetPage />} />
+          <Route path="/wallet-settings" element={<WalletPage/>}/>
+          <Route path="*" element={<>Page Not found</>} />
         </Routes>
       </main>
 
