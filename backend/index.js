@@ -9,45 +9,18 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import { gql } from 'graphql-tag'; // Import gql
 
 import { connectDB } from "./db/connectDB.js";
+import mergedResolvers from "./resolvers/index.js";
+import mergedTypeDefs from "./typeDefs/index.js";
 
 dotenv.config();
-console.log("uri", process.env.MONGO_URI);
 const __dirname = path.resolve();
 const app = express();
 const httpServer = http.createServer(app);
 
 
-// Sample type definitions and resolvers
-const typeDefs = gql`
-  type User {
-    id: ID!
-    username: String!
-    email: String!
-  }
-
-  type Query {
-    hello: String
-    getUser(id: ID!): User
-    listUsers: [User]
-  }
-`;
-
-const users = [
-  { id: "1", username: "Alice", email: "alice@example.com" },
-  { id: "2", username: "Bob", email: "bob@example.com" },
-];
-
-const resolvers = {
-  Query: {
-    hello: () => 'Hello, world!',
-    getUser: (_, { id }) => users.find(user => user.id === id),
-    listUsers: () => users,
-  },
-};
-
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  typeDefs: mergedTypeDefs,
+  resolvers: mergedResolvers,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
@@ -72,11 +45,7 @@ app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
-// Static file serving for frontend (uncomment when ready)
-// app.use(express.static(path.join(__dirname, "frontend/dist")));
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
-// });
+
 
 // Modified server startup
 await httpServer.listen({ port: 4000 });
