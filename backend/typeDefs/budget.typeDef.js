@@ -6,11 +6,11 @@ const budgetTypeDef = `#graphql
     spentSoFar: Float!
     moneyLeft: Float!
     budgetPeriod: String!
-    startDate: Date!
-    endDate: Date!
+    startDate: String!  # Change to String
+    endDate: String!    # Change to String
     userId: ID!
-    createdAt: Date!
-    updatedAt: Date!
+    createdAt: String!
+    updatedAt: String!
   }
 
   type Query {
@@ -27,7 +27,7 @@ const budgetTypeDef = `#graphql
     amount: Float!
     spentSoFar: Float
     budgetPeriod: String # Optional field
-    startDate: Date!
+    startDate: String!   # Change to String
     userId: ID!
   }
 `;
