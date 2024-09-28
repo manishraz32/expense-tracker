@@ -2,9 +2,10 @@ import { mergeTypeDefs } from "@graphql-tools/merge";
 
 // typeDefs
 import userTypeDef from "./user.typeDef.js";
+import walletTypeDef from "./wallet.typeDef.js";
 // import transactionTypeDef from "./transaction.typeDef.js";
 
-const mergedTypeDefs = mergeTypeDefs([userTypeDef]);
+const mergedTypeDefs = mergeTypeDefs([userTypeDef, walletTypeDef]);
 
 export default mergedTypeDefs;
 

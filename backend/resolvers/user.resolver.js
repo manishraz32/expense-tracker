@@ -8,7 +8,7 @@ const userResolver = {
                 const { username, name, email, password, confirmPassword } = input;
         
                 // Check if all fields are provided
-                if (!username || !name || !password || !confirmPassword) {
+                if (!username || !name || !password || !confirmPassword || !email) {
                     throw new Error("All fields are required");
                 }
         
@@ -20,8 +20,14 @@ const userResolver = {
                 // Check if user already exists
                 const existingUser = await User.findOne({ username });
                 if (existingUser) {
-                    throw new Error("User already exists");
+                    throw new Error("user already exists");
                 }
+
+				// check if email already exists
+				const existingEmail = await User.findOne({email});
+				if (existingEmail) {
+					throw new Error("Email already exists");
+				}
         
                 // Hash the password
                 const salt = await bcrypt.genSalt(10);
