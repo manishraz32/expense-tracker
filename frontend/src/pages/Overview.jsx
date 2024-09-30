@@ -9,7 +9,7 @@ import ExpenceChart from '../components/ExpenceChart';
 
 const Overview = () => {
   return (
-    <>
+    <div className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
       <div>
         <Button
           component="label"
@@ -79,7 +79,7 @@ const Overview = () => {
            <ExpenceChart />
          </div>
       </div>
-    </>
+    </div>
   )
 }
 

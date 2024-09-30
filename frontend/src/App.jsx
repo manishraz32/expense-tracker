@@ -1,34 +1,39 @@
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Overview from './pages/Overview';
 import BudgetPage from './pages/BudgetPage';
 import WalletPage from './pages/WalletPage';
+import LogInPage from './pages/LogInPage';
+import SignUpPage from './pages/SignUpPage';
 
 function App() {
+  const login = false;
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <Navbar />
+      {login && <Navbar />}
 
       {/* Main Content */}
-      <main className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
         <Routes>
           {/* Define your routes here */}
-          <Route path="/" element={<Home />} />
-          <Route path="/overview" element={<Overview />} />
-          <Route path="/budgets" element={<BudgetPage />} />
-          <Route path="/wallet-settings" element={<WalletPage/>}/>
+          <Route path='/login' element={!login ? <LogInPage /> : <Navigate to='/' />} />
+				  <Route path='/signup' element={!login ? <SignUpPage /> : <Navigate to='/' />} />
+          <Route path="/" element={login ? <Home /> : <Navigate to='/login' />} />
+          <Route path="/overview" element={login ? <Overview /> : <Navigate to='/login' />} />
+          <Route path="/budgets" element={login ? <BudgetPage /> : <Navigate to='/login' />} />
+          <Route path="/wallet-settings" element={login ? <WalletPage /> : <Navigate to='/login' />} />
           <Route path="*" element={<>Page Not found</>} />
         </Routes>
-      </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white p-4">
-        <div className="container mx-auto">
-          <p>&copy; 2024 My Website. All rights reserved.</p>
-        </div>
-      </footer>
+      {login &&
+        <footer className="bg-gray-800 text-white p-4">
+          <div className="container mx-auto">
+            <p>&copy; 2024 My Website. All rights reserved.</p>
+          </div>
+        </footer>
+      }
     </div>
   );
 }

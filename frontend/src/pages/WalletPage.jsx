@@ -2,7 +2,8 @@ import React from 'react'
 
 const WalletPage = () => {
     return (
-        <div>
+     <div className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
+         <div>
             <div class="py-2">
                 <p className="text-2xl text-gray-925">Wallet Settings</p>
             </div>
@@ -51,6 +52,8 @@ const WalletPage = () => {
                 </div>
             </div>
         </div>
+     </div>
+       
     )
 }
 

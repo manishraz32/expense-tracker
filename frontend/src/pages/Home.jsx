@@ -7,7 +7,7 @@ import AutocompleteWithCheckbox from '../components/ AutocompleteWithCheckbox ';
 
 const Home = () => {
   return (
-    <>
+    <div className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
       <div>
         <Button
           component="label"
@@ -104,8 +104,8 @@ const Home = () => {
           <div className="flex justify-between items-center">
             <div className="left flex items-center gap-[4px]">
               <div className="avatar placeholder">
-                <div className="bg-neutral text-neutral-content w-8 rounded-full">
-                  <span className="text-xs">UI</span>
+                <div className="bg-green text-neutral-content w-8 rounded-full">
+                 <img src="school.png" alt="" />
                 </div>
               </div>
               <div class="flex flex-col gap-1">
@@ -119,7 +119,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

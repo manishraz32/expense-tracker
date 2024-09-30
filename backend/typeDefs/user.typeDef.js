@@ -26,10 +26,10 @@ const userTypeDef = `#graphql
 
   }
 
-  # input LoginInput {
-  #   username: String!
-  #   password: String!
-  # }
+  input LoginInput {
+    username: String!
+    password: String!
+  }
 
   # type LogoutResponse {
   #   message: String!
