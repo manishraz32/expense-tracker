@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SIGN_UP } from '../graphql/mutations/user.mutations';
+import { useMutation } from '@apollo/client';
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +11,9 @@ const SignUpPage = () => {
     password: '',
     confirmPassword: ''
   });
+  const [signup, { loading }] = useMutation(SIGN_UP, {
+		// refetchQueries: ["GetAuthenticatedUser"],
+	});
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -32,13 +37,34 @@ const SignUpPage = () => {
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
-
+  
+  // const handleSubmit = async (e) => {
+	// 	e.preventDefault();
+	// 	try {
+	// 		await signup({
+	// 			variables: {
+	// 				input: signUpData,
+	// 			},
+	// 		});
+	// 	} catch (error) {
+	// 		console.error("Error:", error);
+	// 		toast.error(error.message);
+	// 	}
+	// };
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (validate()) {
-      console.log('Form Data Submitted:', formData);
-      setSubmitted(true);
+      try {
+        await signup({
+          variables: {
+            input: formData,
+          },
+        })
+        console.log("signed up successfully");
+      } catch(error) {
+        console.log("error", error);
+      }
     }
   };
 
