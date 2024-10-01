@@ -22,16 +22,16 @@ const Home = () => {
       </div>
       <div className="p-[15px] flex flex-col gap-2 bg-[#fff] rounded-lg">
         <div className="flex justify-between">
-          <p class="text-sm font-semibold">Filters</p>
-          <p class="text-sm text-gray-450">Reset Filters</p>
+          <p className="text-sm font-semibold">Filters</p>
+          <p className="text-sm text-gray-450">Reset Filters</p>
         </div>
         <div className="flex flex-col w-full  lg:flex-row gap-2">
           <div className="w-full flex flex-col">
-            <label class="text-sm text-gray-450 mb-1">By Category</label>
+            <label className="text-sm text-gray-450 mb-1">By Category</label>
             <AutocompleteWithCheckbox />
           </div>
           <div className="w-full flex flex-col">
-            <label class="text-sm text-gray-450 mb-1">By Category</label>
+            <label className="text-sm text-gray-450 mb-1">By Category</label>
             <input
               type="text"
               placeholder="Type here"
@@ -39,7 +39,7 @@ const Home = () => {
             />
           </div>
           <div className="w-full flex flex-col">
-            <label class="text-sm text-gray-450 mb-1">By Note</label>
+            <label className="text-sm text-gray-450 mb-1">By Note</label>
             <input
               type="text"
               placeholder="Type here"
@@ -65,8 +65,8 @@ const Home = () => {
       </div>
       <div className="bg-white rounded-lg p-[15px] flex flex-col gap-2">
         <div className="flex justify-between">
-          <p class="text-sm text-gray-925">Sept 16, 2024</p>
-          <p class="text-sm text-gray-550 font-bold">37000</p>
+          <p className="text-sm text-gray-925">Sept 16, 2024</p>
+          <p className="text-sm text-gray-550 font-bold">37000</p>
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center">
@@ -76,7 +76,7 @@ const Home = () => {
                   <span className="text-xs">UI</span>
                 </div>
               </div>
-              <div class="flex flex-col gap-1">
+              <div className="flex flex-col gap-1">
                 <p className="text-gray-925 text-sm leading-5">Gift</p>
                 <p className="px-2 text-xs bg-gray-25 rounded-full">chip</p>
               </div>
@@ -92,7 +92,7 @@ const Home = () => {
                   <span className="text-xs">UI</span>
                 </div>
               </div>
-              <div class="flex flex-col gap-1">
+              <div className="flex flex-col gap-1">
                 <p className="text-gray-925 text-sm leading-5">Gift</p>
                 <p className="px-2 text-xs bg-gray-25 rounded-full">chip</p>
               </div>
@@ -108,7 +108,7 @@ const Home = () => {
                  <img src="school.png" alt="" />
                 </div>
               </div>
-              <div class="flex flex-col gap-1">
+              <div className="flex flex-col gap-1">
                 <p className="text-gray-925 text-sm leading-5">Gift</p>
                 <p className="px-2 text-xs bg-gray-25 rounded-full">chip</p>
               </div>

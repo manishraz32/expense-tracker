@@ -24,16 +24,16 @@ const Overview = () => {
       </div>
       <div className="p-[15px] flex flex-col gap-2 bg-[#fff] rounded-lg">
         <div className="flex justify-between">
-          <p class="text-sm font-semibold">Filters</p>
-          <p class="text-sm text-gray-450">Reset Filters</p>
+          <p className="text-sm font-semibold">Filters</p>
+          <p className="text-sm text-gray-450">Reset Filters</p>
         </div>
         <div className="flex flex-col w-full  lg:flex-row gap-2">
           <div className="w-full flex flex-col">
-            <label class="text-sm text-gray-450 mb-1">By Category</label>
+            <label className="text-sm text-gray-450 mb-1">By Category</label>
             <AutocompleteWithCheckbox />
           </div>
           <div className="w-full flex flex-col">
-            <label class="text-sm text-gray-450 mb-1">By Category</label>
+            <label className="text-sm text-gray-450 mb-1">By Category</label>
             <input
               type="text"
               placeholder="Type here"
@@ -41,7 +41,7 @@ const Overview = () => {
             />
           </div>
           <div className="w-full flex flex-col">
-            <label class="text-sm text-gray-450 mb-1">By Note</label>
+            <label className="text-sm text-gray-450 mb-1">By Note</label>
             <input
               type="text"
               placeholder="Type here"

@@ -12,11 +12,22 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useApolloClient, useMutation } from '@apollo/client';
+import { LOGOUT } from '../graphql/mutations/user.mutations';
+import { Login } from '@mui/icons-material';
+import { GET_AUTHENTICATED_USER } from '../graphql/queries/user.query';
+import { useNavigate } from 'react-router-dom';
+
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
+  const client = useApolloClient();
+  const [logout, { loading }] = useMutation(LOGOUT, {
+		refetchQueries: [{ query: GET_AUTHENTICATED_USER }],
+	});
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -34,6 +45,20 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  
+  const handleSettingClick = async (setting, e) => {
+    e.stopPropagation(); 
+    if(setting === 'Logout') {
+      try {
+        await logout();
+        await client.resetStore();
+      } catch(error) {
+        console.log("error", error);
+      }
+    }
+    handleCloseUserMenu();
+  }
+
 
   return (
     <AppBar 
@@ -148,7 +173,7 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={(e) => handleSettingClick(setting, e)}>
                   <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                 </MenuItem>
               ))}

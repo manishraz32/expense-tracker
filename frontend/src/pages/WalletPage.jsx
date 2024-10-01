@@ -4,7 +4,7 @@ const WalletPage = () => {
     return (
      <div className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
          <div>
-            <div class="py-2">
+            <div className="py-2">
                 <p className="text-2xl text-gray-925">Wallet Settings</p>
             </div>
             <div className="bg-white flex flex-col gap-4 rounded-lg py-3 px-2">
@@ -42,8 +42,8 @@ const WalletPage = () => {
                 </button>
                 <div className="flex flex-col gap-4">
                     <div className="text-sm font-semibold text-gray-925">Wallet Member</div>
-                    <div class="flex gap-4 items-center">
-                        <div class="w-10 h-10 rounded-full bg-gray-400"></div>
+                    <div className="flex gap-4 items-center">
+                        <div className="w-10 h-10 rounded-full bg-gray-400"></div>
                         <div className="flex flex-col">
                             <p className="text-sm text-gray-925">Manish Kumar Prasad</p>
                             <p className="text-gray-450 text-sm">manishraz32@gmail.com</p>

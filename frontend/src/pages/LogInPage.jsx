@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LOGIN } from '../graphql/mutations/user.mutations';
 import { useMutation } from '@apollo/client';
+import { GET_AUTHENTICATED_USER } from '../graphql/queries/user.query';
 
 const LogInPage = () => {
 
   const [login, { loading }] = useMutation(LOGIN, {
-		// refetchQueries: ["GetAuthenticatedUser"],
+		refetchQueries: [{ query: GET_AUTHENTICATED_USER }],
 	});
   const [formData, setFormData] = useState({
     email: '',
