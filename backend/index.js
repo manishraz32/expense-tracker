@@ -11,6 +11,7 @@ import { gql } from 'graphql-tag'; // Import gql
 import { connectDB } from "./db/connectDB.js";
 import mergedResolvers from "./resolvers/index.js";
 import mergedTypeDefs from "./typeDefs/index.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 const __dirname = path.resolve();
@@ -30,15 +31,20 @@ await server.start();
 // Set up our Express middleware to handle CORS, body parsing, and our expressMiddleware function.
 app.use(
   "/graphql",
+  cookieParser(),
   cors({
-    origin: "http://localhost:3001",
-    credentials: true,
+    origin: "http://localhost:3001", // Adjust your frontend's origin here
+    credentials: true,  // Allows cookies to be sent
   }),
   express.json(),
   expressMiddleware(server, {
-    context: async ({ req, res }) => ({ /* Add context here later */ }),
+    context: async ({ req, res }) => {
+      // Pass both `req` and `res` so that you can access them in resolvers
+      return { req, res };
+    },
   })
 );
+
 
 // Health check route
 app.get('/health', (req, res) => {

@@ -6,13 +6,17 @@ import BudgetPage from './pages/BudgetPage';
 import WalletPage from './pages/WalletPage';
 import LogInPage from './pages/LogInPage';
 import SignUpPage from './pages/SignUpPage';
+import { GET_AUTHENTICATED_USER } from './graphql/queries/user.query';
+import { useQuery } from '@apollo/client';
 
 function App() {
+  const { loading, data } = useQuery(GET_AUTHENTICATED_USER);
+  console.log("data", data);
   const login = false;
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      {login && <Navbar />}
+      {false && <Navbar />}
 
       {/* Main Content */}
         <Routes>
@@ -27,7 +31,7 @@ function App() {
         </Routes>
 
       {/* Footer */}
-      {login &&
+      {false &&
         <footer className="bg-gray-800 text-white p-4">
           <div className="container mx-auto">
             <p>&copy; 2024 My Website. All rights reserved.</p>

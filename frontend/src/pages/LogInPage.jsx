@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { LOGIN } from '../graphql/mutations/user.mutations';
+import { useMutation } from '@apollo/client';
 
 const LogInPage = () => {
+
+  const [login, { loading }] = useMutation(LOGIN, {
+		// refetchQueries: ["GetAuthenticatedUser"],
+	});
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
 
@@ -19,7 +25,7 @@ const LogInPage = () => {
   // Validate form inputs
   const validate = () => {
     let tempErrors = {};
-    if (!formData.username) tempErrors.username = 'Username is required';
+    if (!formData.email) tempErrors.email = 'Email is required';
     if (!formData.password) tempErrors.password = 'Password is required';
 
     setErrors(tempErrors);
@@ -27,11 +33,19 @@ const LogInPage = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log('Log In Data Submitted:', formData);
-      setSubmitted(true);
+      try {
+        await login({
+          variables: {
+            input: formData,
+          },
+        })
+        console.log("logged in successfully");
+      } catch(error) {
+        console.log("error", error);
+      }
     }
   };
 
@@ -48,15 +62,15 @@ const LogInPage = () => {
 
         <div className="mb-4">
           <input
-            type="text"
-            name="username"
-            placeholder="Username"
+            type="email"
+            name="email"
+            placeholder="Email"
             className="w-full p-2 border border-gray-300 rounded-md focus:border-gray-500 focus:outline-none"
-            value={formData.username}
+            value={formData.email}
             onChange={handleChange}
           />
-          {errors.username && (
-            <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
           )}
         </div>
 
