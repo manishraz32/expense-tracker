@@ -18,15 +18,12 @@ import { Login } from '@mui/icons-material';
 import { GET_AUTHENTICATED_USER } from '../graphql/queries/user.query';
 import { useNavigate } from 'react-router-dom';
 
-
 const pages = ['transaction', 'overview', 'budgets', 'Wallet Settings'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
   const client = useApolloClient();
-  const [logout, { loading }] = useMutation(LOGOUT, {
-		refetchQueries: [{ query: GET_AUTHENTICATED_USER }],
-	});
+  const [logout, { loading }] = useMutation(LOGOUT);
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -45,25 +42,55 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  
+
   const handleSettingClick = async (setting, e) => {
-    e.stopPropagation(); 
-    if(setting === 'Logout') {
+    e.stopPropagation();
+    if (setting === 'Logout') {
       try {
-        await logout();
-        await client.resetStore();
-      } catch(error) {
-        console.log("error", error);
+        await logout({
+          update(cache) {
+            try {
+              cache.writeQuery({
+                query: GET_AUTHENTICATED_USER,
+                data: {
+                  authUser: null,
+                },
+              });
+            } catch (e) {
+              console.error("Error updating cache after logout:", e);
+            }
+          },
+          optimisticResponse: {
+            logout: true,
+          },
+        });
+        
+        // Clear store to ensure all data is removed
+        await client.clearStore(); 
+        localStorage.clear();
+      } catch (error) {
+        console.error("Logout failed:", error.message || error);
+        if (error.networkError) {
+          console.error("Network error:", error.networkError);
+        }
+        if (error.graphQLErrors) {
+          error.graphQLErrors.forEach(({ message, locations, path }) => {
+            console.error(
+              `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+            );
+          });
+        }
       }
     }
     handleCloseUserMenu();
   }
-  
+
+
   const handleNavClick = (e, page) => {
     e.preventDefault();
-    if(page === 'Wallet Settings') {
+    if (page === 'Wallet Settings') {
       navigate('/wallet-settings');
-    } else if(page === 'transaction') {
+    } else if (page === 'transaction') {
       navigate('/');
     } else {
       navigate(`/${page}`);
@@ -72,7 +99,7 @@ function Navbar() {
   }
 
   return (
-    <AppBar 
+    <AppBar
       position="static"
       sx={{ backgroundColor: '#12C48B' }}
     >

@@ -8,6 +8,8 @@ import LogInPage from './pages/LogInPage';
 import SignUpPage from './pages/SignUpPage';
 import { GET_AUTHENTICATED_USER } from './graphql/queries/user.query';
 import { useQuery } from '@apollo/client';
+import { Toaster } from 'react-hot-toast';
+
 
 function App() {
   const { loading, data, error } = useQuery(GET_AUTHENTICATED_USER, {
@@ -16,12 +18,22 @@ function App() {
     return null;
   }
   let isAuthenticate =  Boolean(data?.authUser);
+  if(isAuthenticate) {
+    console.log("authUser");
+    localStorage.setItem("user", JSON.stringify(data.authUser));
+  } else {
+    localStorage.clear();
+
+    console.log('localStorage after clear:', localStorage);
+
+  }
   if(error) {
     isAuthenticate = false;
   }
   console.log("isAuthenticate", isAuthenticate);
   return (
     <div className="flex flex-col min-h-screen">
+      <Toaster position="top-right" /> 
       {/* Header */}
       {isAuthenticate && <Navbar />}
 

@@ -31,10 +31,11 @@ const walletResolver = {
               // Get all wallets of the user
               const allWallets = await Wallet.find({ userId });
       
-              // If the user already has a wallet, throw an error
-            //   if (allWallets.length > 0) {
-            //     throw new Error("Only one wallet is allowed per user");
-            //   }
+              //If the user already has a wallet, throw an error
+              
+              if (allWallets.length > 0) {
+                throw new Error("Only one wallet is allowed per user");
+              }
       
               // Check if wallet name already exists
               const isNameExist = allWallets?.find((wallet) => wallet.walletName === walletName);
