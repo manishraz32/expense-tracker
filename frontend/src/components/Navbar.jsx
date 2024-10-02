@@ -19,7 +19,7 @@ import { GET_AUTHENTICATED_USER } from '../graphql/queries/user.query';
 import { useNavigate } from 'react-router-dom';
 
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = ['transaction', 'overview', 'budgets', 'Wallet Settings'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
@@ -58,7 +58,18 @@ function Navbar() {
     }
     handleCloseUserMenu();
   }
-
+  
+  const handleNavClick = (e, page) => {
+    e.preventDefault();
+    if(page === 'Wallet Settings') {
+      navigate('/wallet-settings');
+    } else if(page === 'transaction') {
+      navigate('/');
+    } else {
+      navigate(`/${page}`);
+    }
+    handleCloseNavMenu();
+  }
 
   return (
     <AppBar 
@@ -114,7 +125,7 @@ function Navbar() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={(e) => handleNavClick(e, page)}>
                   <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                 </MenuItem>
               ))}
@@ -143,7 +154,7 @@ function Navbar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={(e) => handleNavClick(e, page)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
