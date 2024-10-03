@@ -66,7 +66,7 @@ function Navbar() {
         });
         
         // Clear store to ensure all data is removed
-        await client.clearStore(); 
+        // await client.clearStore(); 
         localStorage.clear();
       } catch (error) {
         console.error("Logout failed:", error.message || error);

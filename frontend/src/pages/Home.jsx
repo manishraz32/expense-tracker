@@ -1,11 +1,35 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import PlusIcon from '../assets/PlusIcon';
 import AutocompleteWithCheckbox from '../components/ AutocompleteWithCheckbox ';
+import CommonDialog from '../components/CommonDialog ';
 
 
 const Home = () => {
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    category: '',
+    date: '',
+    amount: '',
+  });
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = () => {
+    // Handle the form submission here, e.g., send data to an API
+    console.log('Form submitted:', formData);
+    setOpen(false);
+  };
+
+  const categories = ['Food', 'Transportation', 'Shopping', 'Health', 'Education'];
+  const categories1 = ['Food1', 'Transportation1', 'Shopping1', 'Health1', 'Education1'];
   return (
     <div className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
       <div>
@@ -16,9 +40,19 @@ const Home = () => {
           tabIndex={-1}
           startIcon={<PlusIcon />}
           sx={{ backgroundColor: '#12C48B' }}
+          onClick={handleClickOpen}
         >
           Add transaction
         </Button>
+        <CommonDialog
+          open={open}
+          onClose={handleClose}
+          onSubmit={handleSubmit}
+          formData={formData}
+          setFormData={setFormData}
+          title="Add Transaction"
+          categories={categories} // Pass categories as a prop
+        />
       </div>
       <div className="p-[15px] flex flex-col gap-2 bg-[#fff] rounded-lg">
         <div className="flex justify-between">
@@ -105,7 +139,7 @@ const Home = () => {
             <div className="left flex items-center gap-[4px]">
               <div className="avatar placeholder">
                 <div className="bg-green text-neutral-content w-8 rounded-full">
-                 <img src="school.png" alt="" />
+                  <img src="school.png" alt="" />
                 </div>
               </div>
               <div className="flex flex-col gap-1">

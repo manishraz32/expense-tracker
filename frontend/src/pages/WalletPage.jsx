@@ -1,7 +1,11 @@
+import { useMutation } from '@apollo/client';
 import { useState } from 'react'
 import toast from 'react-hot-toast'
+import { CREATE_WALLET } from '../graphql/mutations/wallet.mutations';
 
 const WalletPage = () => {
+    const [createWallet, { loading }] = useMutation(CREATE_WALLET);
+    const _id = JSON.parse(localStorage.getItem('user'))._id;
     const [walletFormData, setWalletFormData] = useState({
         walletName: "",
         initialBalance: ""
@@ -21,7 +25,7 @@ const WalletPage = () => {
     // Validate the form before submission
     const validateForm = () => {
         const newErrors = {};
-        
+
         if (!walletFormData.walletName) {
             newErrors.walletName = "Wallet Name is required";
         }
@@ -36,11 +40,37 @@ const WalletPage = () => {
         return Object.keys(newErrors).length === 0; // If no errors, form is valid
     };
 
-    const handleUpdateClick = () => {
+    const handleUpdateClick = async () => {
         if (validateForm()) {
-            console.log(walletFormData);
-            console.log("formSubmitted");
-            toast.success('Wallet updated successfully!');
+            try {
+                const response = await createWallet({
+                    variables: {
+                        input: {
+                            walletName: walletFormData.walletName,
+                            initialBalance: parseFloat(walletFormData.initialBalance),
+                            userId: _id
+                        },
+                    },
+                });
+
+                toast.success('Wallet updated successfully!');
+
+            } catch (error) {
+                if (error.networkError) {
+                    // Handle network-related errors, like connection issues
+                    console.error('Network error:', error.networkError);
+                    toast.error('Network error, please check your connection.');
+                } else if (error.graphQLErrors) {
+                    // Handle GraphQL errors returned from the server
+                    // GraphQL returns multiple errors
+                    error.graphQLErrors.forEach(({ message, path, extensions }) => {
+                        console.error(
+                            `GraphQL error: Message: ${message}, Path: ${path}, Code: ${extensions.code}`
+                        );
+                        toast.error(`Error: ${message}`);
+                    });
+                }
+            }
         } else {
             toast.error('Please fix the validation errors.');
         }

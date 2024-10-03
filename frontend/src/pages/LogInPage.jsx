@@ -7,7 +7,7 @@ import { GET_AUTHENTICATED_USER } from '../graphql/queries/user.query';
 const LogInPage = () => {
 
   const [login, { loading }] = useMutation(LOGIN, {
-		refetchQueries: [{ query: GET_AUTHENTICATED_USER }],
+		refetchQueries: [{ query: GET_AUTHENTICATED_USER, fetchPolicy: 'network-only' }],
 	});
   const [formData, setFormData] = useState({
     email: '',
