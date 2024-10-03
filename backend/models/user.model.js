@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6
   },
+  wallet: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: false,
+    ref: 'Wallet'
+  },
   createdAt: {
     type: Date,
     default: Date.now

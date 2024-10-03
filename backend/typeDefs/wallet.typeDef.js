@@ -1,29 +1,39 @@
 const walletTypeDef = `#graphql
-  type Wallet {
-    _id: ID!
+
+scalar Date
+
+type Query {
+    getWallets: [Wallet]
+    getWalletById(id: ID!): Wallet
+}
+
+type Mutation {
+    createWallet(input: WalletInput!): Wallet
+    updateWallet(id: ID!, input: WalletInput!): Wallet
+    deleteWallet(id: ID!): String
+}
+
+input WalletInput {
+    userId: ID!
     walletName: String!
-    initialBalance: Float!  # Use Float for numbers with decimals
-    userId: ID!             # This can also be a reference to a User type if needed
-  }
+    initialBalance: Float!
+    currency: String
+    spentSoFar: Float
+    moneyAddedSoFar: Float
+}
 
-  type Query {
-    getWallet(id: ID!): Wallet
-  }
-
-  type Mutation {
-    createWallet(input: WalletInput): Wallet  
-  }
-
-  input WalletInput {
+type Wallet {
+    id: ID!
+    userId: ID!
     walletName: String!
-    initialBalance: Float!  # Use Float instead of Number
-    userId: ID!             # ID type for the user reference
-  }
-
-  # You can uncomment this if needed
-  # type LogoutResponse {
-  #   message: String!
-  # }
-`;
+    initialBalance: Float!
+    currency: String!
+    spentSoFar: Float!
+    moneyAddedSoFar: Float!
+    moneyLeft: Float!
+    changeTillNow: Float!
+    createdAt: Date!
+    updatedAt: Date!
+}`;
 
 export default walletTypeDef;

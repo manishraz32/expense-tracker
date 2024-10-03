@@ -1,65 +1,100 @@
-import Wallet from "../models/wallet.model.js";
-import User from "../models/user.model.js";
+import Wallet from '../models/wallet.model.js'; // Adjust the path as needed
+import { ValidationError } from 'apollo-server-express'; // Apollo's built-in error handling
 
-const walletResolver = {
-	Mutation: {
-		createWallet: async (_, { input }, context) => {
-            try {
-              const { walletName, initialBalance, userId } = input;
-      
-              // Check if the user is authenticated
-              //   if (!context.user) {
-              //     throw new Error("Authentication required");
-              //   }
-      
-              // Ensure the authenticated user is the one creating the wallet
-              //   if (context.user._id !== userId) {
-              //     throw new Error("Unauthorized action");
-              //   }
-      
-              // Validate input fields
-              if (!walletName || !initialBalance || !userId) {
-                throw new Error("All fields are required");
-              }
-      
-              // Check if the user exists
-              const user = await User.findById(userId);
-              if (!user) {
-                throw new Error("User not found");
-              }
-      
-              // Get all wallets of the user
-              const allWallets = await Wallet.find({ userId });
-      
-              //If the user already has a wallet, throw an error
-              
-              if (allWallets.length > 0) {
-                throw new Error("Only one wallet is allowed per user");
-              }
-      
-              // Check if wallet name already exists
-              const isNameExist = allWallets?.find((wallet) => wallet.walletName === walletName);
-              if (isNameExist) {
-                throw new Error("Wallet name already exists");
-              }
-      
-              // Create a new wallet
-              const newWallet = new Wallet({
-                walletName,
-                initialBalance,
-                userId, // Reference the user who owns this wallet
-              });
-      
-              // Save the wallet to the database
-              await newWallet.save();
-      
-              return newWallet;
-            } catch (err) {
-              console.error("Error in createWallet: ", err);
-              throw new Error(err.message || "Internal server error");
-            }
-          },
-	},
+// Validate wallet input data
+const validateWalletInput = async (input) => {
+  console.log("walletinput2", input);
+  const { walletName, userId, initialBalance } = input;
+
+  try {
+      if (!walletName || typeof walletName !== 'string') {
+          throw new ValidationError('Wallet Name is a required field');
+      }
+      if (!userId || typeof userId !== 'string') {
+          throw new ValidationError('User ID is required and must be a string.');
+      }
+      if (typeof initialBalance !== 'number' || initialBalance < 0) {
+          throw new ValidationError('Initial balance must be a non-negative number.');
+      }
+      const wallets = await Wallet.find({ userId });
+      if (wallets?.length > 0) {
+          throw new ValidationError('Only one wallet is allowed for a user.');
+      }
+  } catch (error) {
+      console.error('Validation error:', error); // Log the error
+      throw error; // Rethrow the error to be handled by GraphQL
+  }
 };
 
-export default walletResolver;
+
+const walletResolvers = {
+    Query: {
+        // Get all wallets
+        getWallets: async () => {
+            try {
+                return await Wallet.find(); // Retrieve all wallets
+            } catch (error) {
+                throw new Error('Error fetching wallets: ' + error.message);
+            }
+        },
+
+        // Get a wallet by ID
+        getWalletById: async (_, { id }) => {
+            try {
+                const wallet = await Wallet.findById(id);
+                if (!wallet) {
+                    throw new Error('Wallet not found');
+                }
+                return wallet;
+            } catch (error) {
+                throw new Error('Error fetching wallet: ' + error.message);
+            }
+        },
+    },
+
+    Mutation: {
+        // Create a new wallet with validation
+        createWallet: async (_, { input }) => {
+            await validateWalletInput(input); // Validate input data
+            try {
+                const wallet = new Wallet(input); // Create a new wallet instance
+                await wallet.save(); // Save to the database
+                return wallet;
+            } catch (error) {
+                throw new Error('Error creating wallet: ' + error.message);
+            }
+        },
+
+        // Update an existing wallet with validation
+        updateWallet: async (_, { id, input }) => {
+            await validateWalletInput(input); // Validate input data
+            try {
+                const wallet = await Wallet.findByIdAndUpdate(id, input, {
+                    new: true, // Return the updated document
+                    runValidators: true, // Validate input against schema
+                });
+                if (!wallet) {
+                    throw new Error('Wallet not found');
+                }
+                return wallet;
+            } catch (error) {
+                throw new Error('Error updating wallet: ' + error.message);
+            }
+        },
+
+        // Delete a wallet
+        deleteWallet: async (_, { id }) => {
+            try {
+                const wallet = await Wallet.findByIdAndDelete(id);
+                if (!wallet) {
+                    throw new Error('Wallet not found');
+                }
+                return `Wallet with ID: ${id} has been deleted`;
+            } catch (error) {
+                throw new Error('Error deleting wallet: ' + error.message);
+            }
+        },
+    },
+};
+
+export default walletResolvers;
