@@ -27,13 +27,18 @@ const transactionTypeDef = `#graphql
     type Transaction {
         _id: ID!
         transactionType: TransactionType!
-        categoryId: ID!
+        category: Category!
         transactionDate: Date!
         amount: Float!
         userId: ID!
         walletId: ID!
         createdAt: Date!
         updatedAt: Date!
+    }
+
+    type Category {
+        id: ID!
+        name: String!
     }
 
 `

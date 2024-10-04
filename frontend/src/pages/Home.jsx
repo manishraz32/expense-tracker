@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/client';
 import { GET_WALLET_BY_ID } from '../graphql/queries/wallet.query';
 import WalletBalanceCard from '../components/WalletBalanceCard';
 import { GET_EXPENSE_CATEGORIES } from '../graphql/queries/category.query';
+import { GET_TRANSACTIONS } from '../graphql/queries/transaction.query';
 
 
 const Home = () => {
@@ -15,9 +16,10 @@ const Home = () => {
   const { data, error, loading } = useQuery(GET_WALLET_BY_ID, {
     variables: { id: user?.wallet._id }
   })
+  const { data: expenseCategoresData, error: expenseError, loading: expenseLoading } = useQuery(GET_EXPENSE_CATEGORIES)
+  const { data: transactionData, error: transactionError, loading: transactionLoading } = useQuery(GET_TRANSACTIONS);
 
-  const {data: expenseCategoresData, error: expenseError, loading: expenseLoading} = useQuery(GET_EXPENSE_CATEGORIES)
-  console.log("expenseCategores", expenseCategoresData);
+  console.log("transactionData", transactionData);
   // add expense transaction
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -118,21 +120,23 @@ const Home = () => {
           <p className="text-sm text-gray-550 font-bold">37000</p>
         </div>
         <div className="flex flex-col gap-4 md:flex-row md:flex-wrap">
-          <div className="flex py-2 flex-auto justify-between rounded-md border border-soldi border-gray-400 items-center lg:w-[45%] px-4">
-            <div className="left flex items-center gap-[4px]">
-              <div className="avatar placeholder">
-                <div className="bg-neutral text-neutral-content w-8 rounded-full">
-                  <span className="text-xs">UI</span>
+          {transactionData?.getTransactions?.map((transaction) => (
+            <div className="flex py-2 flex-auto justify-between rounded-md border border-soldi border-gray-400 items-center lg:w-[45%] px-4">
+              <div className="left flex items-center gap-[4px]">
+                <div className="avatar placeholder">
+                  <div className="bg-neutral text-neutral-content w-8 rounded-full">
+                    <span className="text-xs">UI</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <p className="text-gray-925 text-sm lg:text-lg font-semibold">Gift</p>
                 </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <p className="text-gray-925 text-sm lg:text-lg font-semibold">Gift</p>
+              <div className="right">
+                <p className="text-sm font-bold text-green-app">+1200.0 USD</p>
               </div>
             </div>
-            <div className="right">
-              <p className="text-sm font-bold text-green-app">+1200.0 USD</p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
