@@ -1,6 +1,6 @@
 import Wallet from '../models/wallet.model.js'; // Adjust the path as needed
 import { ValidationError } from 'apollo-server-express'; // Apollo's built-in error handling
-
+import User from '../models/user.model.js'
 // Validate wallet input data
 const validateWalletInput = async (input) => {
   console.log("walletinput2", input);
@@ -59,6 +59,11 @@ const walletResolvers = {
             try {
                 const wallet = new Wallet(input); // Create a new wallet instance
                 await wallet.save(); // Save to the database
+                
+                // push wallet id in user 
+                const user = await User.findById(input.userId);
+                user.wallet = wallet._id;
+                await user.save();
                 return wallet;
             } catch (error) {
                 throw new Error('Error creating wallet: ' + error.message);

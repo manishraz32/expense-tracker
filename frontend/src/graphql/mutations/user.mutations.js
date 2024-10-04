@@ -7,6 +7,9 @@ export const SIGN_UP = gql`
 			name
 			username
             email
+			wallet {
+				_id
+			}
 		}
 	}
 `;
@@ -17,6 +20,9 @@ export const LOGIN = gql`
 			_id
 			name
 			username
+			wallet {
+				_id
+			}
 		}
 	}
 `;

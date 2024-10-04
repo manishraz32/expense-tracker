@@ -4,9 +4,16 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import PlusIcon from '../assets/PlusIcon';
 import AutocompleteWithCheckbox from '../components/ AutocompleteWithCheckbox ';
 import CommonDialog from '../components/CommonDialog ';
+import { useQuery } from '@apollo/client';
+import { GET_WALLET_BY_ID } from '../graphql/queries/wallet.query';
+import WalletBalanceCard from '../components/WalletBalanceCard';
 
 
 const Home = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  const { data, error, loading } = useQuery(GET_WALLET_BY_ID, {
+    variables: { id: user?.wallet._id }
+  })
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     category: '',
@@ -27,7 +34,7 @@ const Home = () => {
     console.log('Form submitted:', formData);
     setOpen(false);
   };
-
+  console.log("data", data);
   const categories = ['Food', 'Transportation', 'Shopping', 'Health', 'Education'];
   const categories1 = ['Food1', 'Transportation1', 'Shopping1', 'Health1', 'Education1'];
   return (
@@ -84,18 +91,22 @@ const Home = () => {
 
       </div>
       <div className="flex gap-5 overflow-auto px-[-16px]">
-        <div className="px-[15px] py-3 bg-white rounded-lg">
-          <p className="text-[#455A65] font-semibold tracking-wide">Current Wallet Balance</p>
-          <p className="text-[24px] font-semibold text-[#12C48B] tracking-wider min-w-[240px]">$ 13700000.00</p>
-        </div>
-        <div className="px-[15px] py-3 bg-white rounded-lg">
-          <p className="text-[#455A65] font-semibold tracking-wide">Current Wallet Balance</p>
-          <p className="text-[24px] font-semibold text-[#12C48B] tracking-wider min-w-[240px]">$ 13700000.00</p>
-        </div>
-        <div className="px-[15px] py-3 bg-white rounded-lg">
-          <p className="text-[#455A65] font-semibold tracking-wide">Current Wallet Balance</p>
-          <p className="text-[24px] font-semibold text-[#12C48B] tracking-wider min-w-[240px]">$ 13700000.00</p>
-        </div>
+        <WalletBalanceCard
+          headerName="Current Wallet Balance"
+          balance={data?.getWalletById?.moneyLeft.toFixed(2)}
+        />
+        <WalletBalanceCard
+          headerName="Total Period Change"
+          balance={data?.getWalletById?.changeTillNow.toFixed(2)}
+        />
+        <WalletBalanceCard
+          headerName="Total Period Expense"
+          balance={data?.getWalletById?.spentSoFar.toFixed(2)}
+        />
+        <WalletBalanceCard
+          headerName="Total Period Income"
+          balance={data?.getWalletById?.moneyAddedSoFar.toFixed(2)}
+        />
       </div>
       <div className="bg-white rounded-lg p-[15px] flex flex-col gap-2">
         <div className="flex justify-between">
