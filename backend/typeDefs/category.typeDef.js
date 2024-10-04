@@ -27,3 +27,5 @@ const categoryTypeDef = `#graphql
     }
     
 `
+
+export default categoryTypeDef;

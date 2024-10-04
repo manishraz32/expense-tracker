@@ -4,8 +4,8 @@ const { Schema } = mongoose;
 
 // Enum for transaction types
 const transactionTypes = {
-    EXPENSE: 'expense',
-    INCOME: 'income',
+    EXPENSE: 'EXPENSE',
+    INCOME: 'INCOME',
 };
 
 // Category Schema definition

@@ -1,6 +1,6 @@
-import Category from '../models/Category'; // Adjust the path as necessary
+import Category from '../models/category.model.js'; // Adjust the path as necessary
 
-const resolvers = {
+const categoriesResolvers = {
     Query: {
         // Resolver for getting all categories
         getCategories: async () => {
@@ -39,4 +39,4 @@ const resolvers = {
     },
 };
 
-export default resolvers;
+export default categoriesResolvers;
