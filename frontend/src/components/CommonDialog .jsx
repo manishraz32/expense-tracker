@@ -28,7 +28,7 @@ const CommonDialog = ({ open, onClose, onSubmit, formData, setFormData, title, c
   const handleCategoryChange = (event, value) => {
     setFormData((prev) => ({
       ...prev,
-      category: value || '',
+      category: value,
     }));
   };
 
@@ -40,14 +40,14 @@ const CommonDialog = ({ open, onClose, onSubmit, formData, setFormData, title, c
       amount: !formData.amount || formData.amount <= 0, // True if amount is empty or <= 0
     };
     setErrors(newErrors);
-    
+
     // Return false if any errors exist
     return !Object.values(newErrors).some((error) => error === true);
   };
 
   const handleSubmit = () => {
     if (validateForm()) {
-      onSubmit(); // Call onSubmit if form is valid
+      onSubmit(); 
     }
   };
 
@@ -87,8 +87,8 @@ const CommonDialog = ({ open, onClose, onSubmit, formData, setFormData, title, c
           {/* Autocomplete with validation */}
           <Autocomplete
             options={categories}
-            getOptionLabel={(option) => option}
-            value={formData.category}
+            getOptionLabel={(option) => option ? `${option.name} (${option.categoryType})` : ""} // Handle undefined option
+            value={formData?.category || null} // Default to null if category is undefined
             onChange={handleCategoryChange}
             renderInput={(params) => (
               <TextField
@@ -110,6 +110,8 @@ const CommonDialog = ({ open, onClose, onSubmit, formData, setFormData, title, c
               />
             )}
           />
+
+
           {/* Date field with validation */}
           <TextField
             margin="dense"
@@ -209,7 +211,7 @@ CommonDialog.propTypes = {
   formData: PropTypes.object.isRequired,
   setFormData: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  categories: PropTypes.array.isRequired, 
+  categories: PropTypes.array.isRequired,
 };
 
 export default CommonDialog;

@@ -1,11 +1,12 @@
-import Transaction from '../models/Transaction.js';
+import Transaction from '../models/transaction.model.js';
+import Wallet from '../models/wallet.model.js'
 import { UserInputError } from 'apollo-server-express';
 
 const transactionResolvers = {
     Query: {
         getTransactions: async () => {
             try {
-                const transactions = await Transaction.find().populate('categoryId userId walletId');
+                const transactions = await Transaction.find();
                 return transactions;
             } catch (error) {
                 throw new Error('Error fetching transactions: ' + error.message);
@@ -15,7 +16,7 @@ const transactionResolvers = {
     Mutation: {
         createTransaction: async (_, { input }) => {
             const { transactionType, categoryId, transactionDate, amount, userId, walletId } = input;
-
+        
             // Validation Logic
             if (!transactionType || !['EXPENSE', 'INCOME'].includes(transactionType)) {
                 throw new UserInputError('Invalid transaction type. Must be EXPENSE or INCOME.');
@@ -35,8 +36,9 @@ const transactionResolvers = {
             if (!walletId) {
                 throw new UserInputError('Wallet ID is required.');
             }
-
+        
             try {
+                // Create the new transaction
                 const newTransaction = new Transaction({
                     transactionType,
                     categoryId,
@@ -46,11 +48,34 @@ const transactionResolvers = {
                     walletId,
                 });
                 await newTransaction.save();
+        
+                // Update the corresponding wallet
+                const walletUpdate = {};
+                if (transactionType === 'EXPENSE') {
+                    walletUpdate.spentSoFar = amount;
+                } else if (transactionType === 'INCOME') {
+                    walletUpdate.moneyAddedSoFar = amount;
+                }
+        
+                // Find and update the wallet
+                const wallet = await Wallet.findById(walletId);
+                if (!wallet) {
+                    throw new UserInputError('Wallet not found.');
+                }
+        
+                // Update wallet fields
+                wallet.spentSoFar += walletUpdate.spentSoFar || 0; // Update spentSoFar if it's an expense
+                wallet.moneyAddedSoFar += walletUpdate.moneyAddedSoFar || 0; // Update moneyAddedSoFar if it's income
+        
+                // Save the wallet after updating
+                await wallet.save();
+        
                 return newTransaction;
             } catch (error) {
                 throw new Error('Error creating transaction: ' + error.message);
             }
-        },
+        }
+        
     },
 };
 

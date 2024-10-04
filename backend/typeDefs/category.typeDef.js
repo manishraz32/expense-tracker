@@ -9,6 +9,8 @@ const categoryTypeDef = `#graphql
 
     type Query {
         getCategories: [Category]
+        getIncomeCatogries: [Category]
+        getExpenseCategories: [Category]
     }
 
     type Mutation {

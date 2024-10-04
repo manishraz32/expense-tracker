@@ -16,7 +16,7 @@ const transactionTypeDef = `#graphql
     }
 
     input TransactionInput {
-        transactionType: TransactionType!  # Changed to enum
+        transactionType: TransactionType!
         categoryId: ID!
         transactionDate: Date!
         amount: Float!
@@ -25,9 +25,9 @@ const transactionTypeDef = `#graphql
     }
 
     type Transaction {
-        id: ID!
+        _id: ID!
         transactionType: TransactionType!
-        categoryGId: ID!
+        categoryId: ID!
         transactionDate: Date!
         amount: Float!
         userId: ID!
@@ -37,3 +37,4 @@ const transactionTypeDef = `#graphql
     }
 
 `
+export default transactionTypeDef;

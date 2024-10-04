@@ -11,6 +11,22 @@ const categoriesResolvers = {
                 throw new Error("Error fetching categories: " + error.message);
             }
         },
+        getIncomeCatogries: async () => {
+            try {
+                const categories = await Category.find({categoryType: 'INCOME'}); // Fetch all categories from the database
+                return categories;
+            } catch (error) {
+                throw new Error("Error in fetching income categories", error.message);
+            }
+        },
+        getExpenseCategories: async () => {
+            try {
+                const categories = await Category.find({categoryType: 'EXPENSE'});
+                return categories;
+            } catch (error) {
+                throw new Error("Error in fetching expense categories", error.message);
+            }
+        }
     },
     Mutation: {
         // Resolver for creating a new category

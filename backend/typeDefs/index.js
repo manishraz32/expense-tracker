@@ -5,9 +5,10 @@ import userTypeDef from "./user.typeDef.js";
 import walletTypeDef from "./wallet.typeDef.js";
 import budgetTypeDef from "./budget.typeDef.js";
 import categoryTypeDef from "./category.typeDef.js";
+import transactionTypeDef from "./transaction.typeDef.js";
 // import transactionTypeDef from "./transaction.typeDef.js";
 
-const mergedTypeDefs = mergeTypeDefs([userTypeDef, walletTypeDef, budgetTypeDef, categoryTypeDef]);
+const mergedTypeDefs = mergeTypeDefs([userTypeDef, walletTypeDef, budgetTypeDef, categoryTypeDef, transactionTypeDef]);
 
 export default mergedTypeDefs;
 

@@ -13,7 +13,7 @@ export const CREATE_WALLET = gql`
             moneyLeft
             changeTillNow
             createdAt
-            updatedAt
+            updatedAtz
 		}
 	}
 `;
