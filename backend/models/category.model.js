@@ -10,10 +10,6 @@ const transactionTypes = {
 
 // Category Schema definition
 const categorySchema = new Schema({
-    id: {
-        type: Schema.Types.ObjectId,
-        auto: true, // Automatically generates an ObjectId
-    },
     name: {
         type: String,
         required: true,

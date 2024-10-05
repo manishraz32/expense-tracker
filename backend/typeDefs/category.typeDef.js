@@ -23,7 +23,7 @@ const categoryTypeDef = `#graphql
     }
 
     type Category {
-        id: ID!
+        _id: ID!
         name: String!
         categoryType: TransactionType!
     }

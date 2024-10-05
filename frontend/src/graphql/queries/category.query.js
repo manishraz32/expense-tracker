@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 export const GET_EXPENSE_CATEGORIES = gql`
     query GetExpenseCategories {
         getExpenseCategories {
-            id
+            _id
             name
             categoryType
         }
@@ -13,7 +13,7 @@ export const GET_EXPENSE_CATEGORIES = gql`
 export const GET_INCOME_CATEGORIES = gql`
     query GetIncomeCtegories {
         getIncomeCategores {
-            id
+            _id
             name
             categoryType
         }

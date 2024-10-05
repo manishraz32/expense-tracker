@@ -4,20 +4,31 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import PlusIcon from '../assets/PlusIcon';
 import AutocompleteWithCheckbox from '../components/ AutocompleteWithCheckbox ';
 import CommonDialog from '../components/CommonDialog ';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { GET_WALLET_BY_ID } from '../graphql/queries/wallet.query';
 import WalletBalanceCard from '../components/WalletBalanceCard';
 import { GET_EXPENSE_CATEGORIES } from '../graphql/queries/category.query';
 import { GET_TRANSACTIONS } from '../graphql/queries/transaction.query';
-
+import { ADD_EXPENCE_TRANSACTION } from '../graphql/mutations/transaction.mutation';
+import toast from 'react-hot-toast'
 
 const Home = () => {
   const user = JSON.parse(localStorage.getItem('user'));
+
+  // Query
   const { data, error, loading } = useQuery(GET_WALLET_BY_ID, {
-    variables: { id: user?.wallet._id }
+    variables: { id: user?.wallet?._id }
   })
   const { data: expenseCategoresData, error: expenseError, loading: expenseLoading } = useQuery(GET_EXPENSE_CATEGORIES)
   const { data: transactionData, error: transactionError, loading: transactionLoading } = useQuery(GET_TRANSACTIONS);
+
+  // muatation 
+  const [createTransaction, { loading: createTransLoading }] = useMutation(ADD_EXPENCE_TRANSACTION, {
+    refetchQueries: [
+      GET_WALLET_BY_ID, 
+      GET_TRANSACTIONS
+    ],
+  });
 
   console.log("transactionData", transactionData);
   // add expense transaction
@@ -36,8 +47,25 @@ const Home = () => {
     setOpen(false);
   };
 
-  const handleSubmit = () => {
-    // Handle the form submission here, e.g., send data to an AP
+  const handleSubmit = async () => {
+    console.log("formData", formData);
+    try {
+      await createTransaction({
+        variables: {
+          input: {
+            transactionType: "EXPENSE",
+            categoryId: formData.category._id,
+            transactionDate: formData.date,
+            amount: parseFloat(formData.amount),
+            userId: user._id,
+            walletId: user?.wallet?._id
+          }
+        }
+      })
+      toast.success("Transaction successfully completed");
+    } catch (error) {
+      console.log("error", error);
+    }
     setOpen(false);
   };
   console.log("data", data);
