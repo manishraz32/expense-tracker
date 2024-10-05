@@ -8,11 +8,18 @@ const transactionTypeDef = `#graphql
     }
 
     type Query {
-        getTransactions: [Transaction]
+        getTransactions(filter: TransactionFilterInput): [Transaction]
     }
 
     type Mutation {
         createTransaction(input: TransactionInput!): Transaction
+    }
+    
+    # Input type for filtering transactions
+    input TransactionFilterInput {
+        categoryIds: [ID!]  # Array of category IDs to filter by
+        minAmount: Float  # Minimum amount for filtering
+        maxAmount: Float  # Maximum amount for filtering
     }
 
     input TransactionInput {

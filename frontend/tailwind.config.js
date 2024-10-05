@@ -64,6 +64,29 @@ export default {
           900: '#134e2b',
           925: '#0f3e22',     // Custom very dark shade of green
         },
+
+        red: {
+          DEFAULT: '#ef4444',
+          light: '#fca5a5',
+          dark: '#b91c1c',
+          app: '#f14c52',
+          button: '#e63946',
+          50: '#fef2f2',
+          100: '#fee2e2',
+          200: '#fecaca',
+          300: '#fca5a5',
+          400: '#f87171',
+          450: '#f14e4e',
+          500: '#ef4444',
+          550: '#e63e3e',
+          600: '#dc2626',
+          650: '#cc2323',
+          700: '#b91c1c',
+          800: '#991b1b',
+          900: '#7f1d1d',
+          925: '#641515',
+        },
+        
       },
       spacing: {
         

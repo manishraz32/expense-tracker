@@ -4,9 +4,26 @@ import { UserInputError } from 'apollo-server-express';
 
 const transactionResolvers = {
     Query: {
-        getTransactions: async () => {
+        getTransactions: async (_, { filter:filterVal }) => {
+
             try {
-                const transactions = await Transaction.find().populate('categoryId');
+                // Create the filter object
+                const { categoryIds, minAmount, maxAmount } = filterVal;
+                console.log("filterVal", filterVal);
+                let filter = {};
+                // Filter by categoryIds if provided
+                if (categoryIds && categoryIds.length > 0) {
+                    filter.categoryId = { $in: categoryIds }; // Use $in for multiple category IDs
+                }
+
+                // Filter for minimum and maximum amounts
+                if (minAmount != null) {
+                    filter.amount = { ...filter.amount, $gte: minAmount }; // Filter for minimum amount
+                }
+                if (maxAmount != null) {
+                    filter.amount = { ...filter.amount, $lte: maxAmount }; // Filter for maximum amount
+                }
+                const transactions = await Transaction.find(filter).populate('categoryId');
                 return transactions.map(transaction => ({
                     _id: transaction._id,
                     transactionType: transaction.transactionType,

@@ -11,8 +11,18 @@ export const GET_EXPENSE_CATEGORIES = gql`
 `
 
 export const GET_INCOME_CATEGORIES = gql`
-    query GetIncomeCtegories {
-        getIncomeCategores {
+    query GetIncomeCategories {
+        getIncomeCatogries {
+            _id
+            name
+            categoryType
+        }
+    }
+`
+
+export const GET_CATEGORIES = gql`
+    query GetCategories {
+        getCategories {
             _id
             name
             categoryType

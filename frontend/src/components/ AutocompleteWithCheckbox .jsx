@@ -1,45 +1,51 @@
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import Checkbox from '@mui/material/Checkbox';
-import { CheckBoxOutlineBlank, CheckBox } from '@mui/icons-material';
+import React from "react";
+import { Autocomplete, TextField, Checkbox } from "@mui/material";
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-const options = [
-  { title: 'Option 1', value: 'option1' },
-  { title: 'Option 2', value: 'option2' },
-  { title: 'Option 3', value: 'option3' },
-];
-
-const AutocompleteWithCheckbox = () => {
-  const [selectedOptions, setSelectedOptions] = useState([]);
+const AutocompleteWithCheckbox  = ({ allCategories }) => {
+  // Icon for unchecked and checked checkboxes
+  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   return (
     <Autocomplete
-      multiple
-      options={options}
-      disableCloseOnSelect
-      getOptionLabel={(option) => option.title}
+      multiple // Enable multiple selection
+      options={allCategories}
+      disableCloseOnSelect // Prevent dropdown from closing after selecting an option
+      getOptionLabel={(option) =>
+        option ? `${option.name} (${option.categoryType})` : ""
+      }
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
-            icon={<CheckBoxOutlineBlank fontSize="small" />}
-            checkedIcon={<CheckBox fontSize="small" />}
+            icon={icon}
+            checkedIcon={checkedIcon}
             style={{ marginRight: 8 }}
             checked={selected}
           />
-          {option.title}
+          {option.name} ({option.categoryType})
         </li>
       )}
-      style={{ width: 300 }}
       renderInput={(params) => (
-        <TextField {...params} variant="outlined" placeholder="Choose" />
+        <TextField
+          {...params}
+          label="Category"
+          margin="dense"
+          fullWidth
+          sx={{
+            '& label': { color: '#555' },
+            '& .MuiInputBase-input': { color: '#333' },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#dcdcdc' },
+              '&:hover fieldset': { borderColor: '#b3b3b3' },
+              '&.Mui-focused fieldset': { borderColor: '#888' },
+            },
+          }}
+        />
       )}
-      value={selectedOptions}
-      onChange={(event, newValue) => {
-        setSelectedOptions(newValue);
-      }}
     />
   );
-}
+};
 
-export default AutocompleteWithCheckbox;
+export default AutocompleteWithCheckbox ;
