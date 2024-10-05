@@ -3,10 +3,18 @@ import { Autocomplete, TextField, Checkbox } from "@mui/material";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-const AutocompleteWithCheckbox  = ({ allCategories }) => {
+const AutocompleteWithCheckbox  = ({ allCategories, setTransactionFilter}) => {
   // Icon for unchecked and checked checkboxes
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+  const handleChange = (event, newValue) => {
+    console.log(newValue);
+    const categorieIds = newValue.map((value) => value._id)
+    setTransactionFilter((prv) => {
+      return {...prv, categoryIds: categorieIds}
+    })
+  };
 
   return (
     <Autocomplete
@@ -16,6 +24,7 @@ const AutocompleteWithCheckbox  = ({ allCategories }) => {
       getOptionLabel={(option) =>
         option ? `${option.name} (${option.categoryType})` : ""
       }
+      onChange={handleChange}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
@@ -34,6 +43,7 @@ const AutocompleteWithCheckbox  = ({ allCategories }) => {
           margin="dense"
           fullWidth
           sx={{
+            padding: "2px",
             '& label': { color: '#555' },
             '& .MuiInputBase-input': { color: '#333' },
             '& .MuiOutlinedInput-root': {

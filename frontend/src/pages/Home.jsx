@@ -21,6 +21,7 @@ const Home = () => {
     maxAmount: null,
     minAmount: null
   })
+  console.log("transactionFilter", transactionFilter);
   // Query
   const { data, error, loading } = useQuery(GET_WALLET_BY_ID, {
     variables: { id: user?.wallet?._id }
@@ -34,12 +35,12 @@ const Home = () => {
     variables: {
       filter: transactionFilter
     },
-    fetchPolicy: "no-cache" 
+    fetchPolicy: "no-cache"
   });
 
   useEffect(() => {
     refetch({ filter: transactionFilter });
-}, [transactionFilter, refetch]);
+  }, [transactionFilter, refetch]);
 
   console.log("income categories", incomeCategoriesData);
 
@@ -132,7 +133,13 @@ const Home = () => {
   };
 
 
-
+  const handleResetFilters = () => {
+    setTransactionFilter({
+      categoryIds: [],
+      maxAmount: null,
+      minAmount: null
+    })
+  }
 
 
 
@@ -192,26 +199,27 @@ const Home = () => {
       <div className="p-[15px] flex flex-col gap-2 bg-[#fff] rounded-lg">
         <div className="flex justify-between">
           <p className="text-sm font-semibold">Filters</p>
-          <p className="text-sm text-gray-450">Reset Filters</p>
+          <p
+            className="text-sm text-gray-450 cursor-pointer"
+            onClick={handleResetFilters}
+
+          >Reset Filters</p>
         </div>
-        <div className="flex flex-col w-full  lg:flex-row gap-2">
-          <div className="w-full flex flex-col">
+        <div className="flex flex-col w-full  lg:flex-row gap-4">
+          <div className="w-full flex flex-col lg:w-[30%]">
             <label className="text-sm text-gray-450 mb-1">By Category</label>
-            <AutocompleteWithCheckbox 
+            <AutocompleteWithCheckbox
               allCategories={allCategories?.getCategories || []}
+              setTransactionFilter={setTransactionFilter}
             />
           </div>
-          <div className="w-full flex flex-col">
-            <label className="text-sm text-gray-450 mb-1">By Category</label>
-            <input
-              type="text"
-              placeholder="Type here"
-              className="input border border-solid border-black w-full focus:border-black focus:outline-none"
-            />
-          </div>
-          <div className="w-full flex flex-col">
+          <div className="w-full flex flex-col lg:w-[30%]">
             <label className="text-sm text-gray-450 mb-1">By amount</label>
-            <PriceSlider />
+              <PriceSlider
+                min={-1000}
+                max={5000}
+                setTransactionFilter={setTransactionFilter}
+              />
           </div>
         </div>
 
