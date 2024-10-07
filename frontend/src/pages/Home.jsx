@@ -13,6 +13,7 @@ import { ADD_EXPENCE_TRANSACTION } from '../graphql/mutations/transaction.mutati
 import toast from 'react-hot-toast'
 import PriceSlider from '../components/PriceSlider';
 import { Autocomplete, TextField } from '@mui/material';
+import BalanceStatusCard from '../components/BalanceStatusCard';
 
 const Home = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -225,22 +226,7 @@ const Home = () => {
 
       </div>
       <div className="flex gap-5 overflow-auto px-[-16px]">
-        <WalletBalanceCard
-          headerName="Current Wallet Balance"
-          balance={data?.getWalletById?.moneyLeft.toFixed(2)}
-        />
-        <WalletBalanceCard
-          headerName="Total Period Change"
-          balance={data?.getWalletById?.changeTillNow.toFixed(2)}
-        />
-        <WalletBalanceCard
-          headerName="Total Period Expense"
-          balance={data?.getWalletById?.spentSoFar.toFixed(2)}
-        />
-        <WalletBalanceCard
-          headerName="Total Period Income"
-          balance={data?.getWalletById?.moneyAddedSoFar.toFixed(2)}
-        />
+       <BalanceStatusCard/>
       </div>
       <div className="bg-white rounded-lg p-[15px] flex flex-col gap-2">
         <div className="flex justify-between">

@@ -6,23 +6,161 @@ import AccountBalanceChart from '../components/AccountBalanceChart';
 import MoneyChangesChart from '../components/MoneyChangesChart';
 import IncomeChart from '../components/IncomeChart';
 import ExpenceChart from '../components/ExpenceChart';
+import { useMutation, useQuery } from '@apollo/client';
+import { GET_EXPENSE_CATEGORIES, GET_INCOME_CATEGORIES } from '../graphql/queries/category.query';
+import CommonDialog from '../components/CommonDialog ';
+import { ADD_EXPENCE_TRANSACTION } from '../graphql/mutations/transaction.mutation';
+import { GET_WALLET_BY_ID } from '../graphql/queries/wallet.query';
+import { GET_TRANSACTIONS } from '../graphql/queries/transaction.query';
+import toast from 'react-hot-toast'
+import BalanceStatusCard from '../components/BalanceStatusCard';
 
 const Overview = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  const { data: expenseCategoresData, error: expenseError, loading: expenseLoading } = useQuery(GET_EXPENSE_CATEGORIES)
+  const { data: incomeCategoriesData, error: incomeError, loading: loadingError } = useQuery(GET_INCOME_CATEGORIES);
+
+  // muatation 
+  const [createTransaction, { loading: createTransLoading }] = useMutation(ADD_EXPENCE_TRANSACTION, {
+    refetchQueries: [
+      GET_WALLET_BY_ID,
+      GET_TRANSACTIONS
+    ],
+  });
+
+
+
+  // add expense transaction
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    category: null,
+    date: '',
+    amount: '',
+  });
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = async () => {
+    console.log("formData", formData);
+    try {
+      await createTransaction({
+        variables: {
+          input: {
+            transactionType: "EXPENSE",
+            categoryId: formData.category._id,
+            transactionDate: formData.date,
+            amount: parseFloat(formData.amount),
+            userId: user._id,
+            walletId: user?.wallet?._id
+          }
+        }
+      })
+      toast.success("Transaction successfully completed");
+    } catch (error) {
+      console.log("error", error);
+    }
+    setOpen(false);
+  };
+
+  // Income modal handler
+
+  const [incomeModalopen, setIncomeModalOpen] = useState(false);
+  const [incomeFormData, setIncomeFormData] = useState({
+    category: null,
+    date: '',
+    amount: '',
+  });
+
+  const handleClickIncomeModalOpen = () => {
+    setIncomeModalOpen(true);
+  };
+
+  const handleIncomeModalClose = () => {
+    setIncomeModalOpen(false);
+  };
+
+  const handleIncomeSubmit = async () => {
+    console.log("formData", incomeFormData);
+    try {
+      await createTransaction({
+        variables: {
+          input: {
+            transactionType: "INCOME",
+            categoryId: incomeFormData.category._id,
+            transactionDate: incomeFormData.date,
+            amount: parseFloat(incomeFormData.amount),
+            userId: user._id,
+            walletId: user?.wallet?._id
+          }
+        }
+      })
+      toast.success("Transaction successfully completed");
+    } catch (error) {
+      console.log("error", error);
+    }
+    setIncomeModalOpen(false);
+  };
+
+
+
   return (
     <div className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
-      <div>
+      <div className="flex flex-col gap-4 lg:flex-row">
         <Button
           component="label"
           role={undefined}
           variant="contained"
           tabIndex={-1}
           startIcon={<PlusIcon />}
-          sx={{ backgroundColor: '#12C48B' }}
+          sx={{ backgroundColor: '#2dba75' }}
+          onClick={handleClickIncomeModalOpen}
         >
-          Add transaction
+          Add Income Transaction
         </Button>
+
+        <CommonDialog
+          open={incomeModalopen}
+          onClose={handleIncomeModalClose}
+          onSubmit={handleIncomeSubmit}
+          formData={incomeFormData}
+          setFormData={setIncomeFormData}
+          title="Add Income Transaction"
+          categories={incomeCategoriesData?.getIncomeCatogries || []} // Pass categories as a prop
+        />
+
+        <Button
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<PlusIcon />}
+          sx={{ backgroundColor: '#f14c52' }}
+          onClick={handleClickOpen}
+        >
+          Add Expense Transaction
+        </Button>
+
+
+        <CommonDialog
+          open={open}
+          onClose={handleClose}
+          onSubmit={handleSubmit}
+          formData={formData}
+          setFormData={setFormData}
+          title="Add Expense Transaction"
+          categories={expenseCategoresData?.getExpenseCategories || []} // Pass categories as a prop
+        />
+
       </div>
-      <div className="p-[15px] flex flex-col gap-2 bg-[#fff] rounded-lg">
+
+      {/* <div className="p-[15px] flex flex-col gap-2 bg-[#fff] rounded-lg">
         <div className="flex justify-between">
           <p className="text-sm font-semibold">Filters</p>
           <p className="text-sm text-gray-450">Reset Filters</p>
@@ -50,34 +188,25 @@ const Overview = () => {
           </div>
         </div>
 
-      </div>
+      </div> */}
+
+
       <div className="flex gap-5 overflow-auto px-[-16px]">
-        <div className="px-[15px] py-3 bg-white rounded-lg">
-          <p className="text-[#455A65] font-semibold tracking-wide">Current Wallet Balance</p>
-          <p className="text-[24px] font-semibold text-[#12C48B] tracking-wider min-w-[240px]">$ 13700000.00</p>
-        </div>
-        <div className="px-[15px] py-3 bg-white rounded-lg">
-          <p className="text-[#455A65] font-semibold tracking-wide">Current Wallet Balance</p>
-          <p className="text-[24px] font-semibold text-[#12C48B] tracking-wider min-w-[240px]">$ 13700000.00</p>
-        </div>
-        <div className="px-[15px] py-3 bg-white rounded-lg">
-          <p className="text-[#455A65] font-semibold tracking-wide">Current Wallet Balance</p>
-          <p className="text-[24px] font-semibold text-[#12C48B] tracking-wider min-w-[240px]">$ 13700000.00</p>
-        </div>
+        <BalanceStatusCard />
       </div>
       <div className="flex flex-col gap-2">
         <div className="w-full h-[400px] bg-[#fff] rounded-lg">
-           <AccountBalanceChart />
-         </div>
-         <div className="w-full h-[400px] bg-[#fff] rounded-lg">
-           <MoneyChangesChart />
-         </div>
-         <div className="w-full h-[400px] bg-[#fff] rounded-lg">
-           <IncomeChart />
-         </div>
-         <div className="w-full h-[400px] bg-[#fff] rounded-lg">
-           <ExpenceChart />
-         </div>
+          <AccountBalanceChart />
+        </div>
+        <div className="w-full h-[400px] bg-[#fff] rounded-lg">
+          <MoneyChangesChart />
+        </div>
+        <div className="w-full h-[400px] bg-[#fff] rounded-lg">
+          <IncomeChart />
+        </div>
+        <div className="w-full h-[400px] bg-[#fff] rounded-lg">
+          <ExpenceChart />
+        </div>
       </div>
     </div>
   )

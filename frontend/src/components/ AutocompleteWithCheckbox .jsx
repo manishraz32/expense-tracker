@@ -19,7 +19,7 @@ const AutocompleteWithCheckbox  = ({ allCategories, setTransactionFilter}) => {
   return (
     <Autocomplete
       multiple // Enable multiple selection
-      options={allCategories}
+      options={allCategories || []}
       disableCloseOnSelect // Prevent dropdown from closing after selecting an option
       getOptionLabel={(option) =>
         option ? `${option.name} (${option.categoryType})` : ""
