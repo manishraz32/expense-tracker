@@ -74,57 +74,124 @@ const transactionResolvers = {
         },
         getDailyIncomeExpense: async (_, { walletId, startDate, endDate }) => {
             try {
-              // Fetch all transactions for the wallet within the date range
-              console.log("input", walletId, startDate, endDate);
-              const transactions = await Transaction.find({
-                walletId,
-                transactionDate: { $gte: new Date(startDate), $lte: new Date(endDate) },
-              }).sort({ transactionDate: 1 });
-      
-              const dailyIncomeExpense = [];
-      
-              // Generate all dates between startDate and endDate
-              const days = eachDayOfInterval({
-                start: new Date(startDate),
-                end: new Date(endDate),
-              });
-      
-              // Iterate over each day and calculate income and expense
-              for (const day of days) {
-                const formattedDay = format(day, 'yyyy-MM-dd');
-      
-                // Get transactions for the current day
-                const dayTransactions = transactions.filter(
-                  (transaction) =>
-                    format(transaction.transactionDate, 'yyyy-MM-dd') === formattedDay
-                );
-      
-                let dailyIncome = 0;
-                let dailyExpense = 0;
-      
-                // Sum up income and expense for the day
-                dayTransactions.forEach((transaction) => {
-                  if (transaction.transactionType === 'INCOME') {
-                    dailyIncome += transaction.amount;
-                  } else if (transaction.transactionType === 'EXPENSE') {
-                    dailyExpense += transaction.amount;
-                  }
+                // Fetch all transactions for the wallet within the date range
+                const transactions = await Transaction.find({
+                    walletId,
+                    transactionDate: { $gte: new Date(startDate), $lte: new Date(endDate) },
+                }).sort({ transactionDate: 1 });
+
+                const dailyIncomeExpense = [];
+
+                // Generate all dates between startDate and endDate
+                const days = eachDayOfInterval({
+                    start: new Date(startDate),
+                    end: new Date(endDate),
                 });
-      
-                // Push the result for the current day
-                dailyIncomeExpense.push({
-                  date: formattedDay,
-                  income: dailyIncome,
-                  expense: dailyExpense,
-                });
-              }
-      
-              return dailyIncomeExpense;
+
+                // Iterate over each day and calculate income and expense
+                for (const day of days) {
+                    const formattedDay = format(day, 'yyyy-MM-dd');
+
+                    // Get transactions for the current day
+                    const dayTransactions = transactions.filter(
+                        (transaction) =>
+                            format(transaction.transactionDate, 'yyyy-MM-dd') === formattedDay
+                    );
+
+                    let dailyIncome = 0;
+                    let dailyExpense = 0;
+
+                    // Sum up income and expense for the day
+                    dayTransactions.forEach((transaction) => {
+                        if (transaction.transactionType === 'INCOME') {
+                            dailyIncome += transaction.amount;
+                        } else if (transaction.transactionType === 'EXPENSE') {
+                            dailyExpense += transaction.amount;
+                        }
+                    });
+
+                    // Push the result for the current day
+                    dailyIncomeExpense.push({
+                        date: formattedDay,
+                        income: dailyIncome,
+                        expense: dailyExpense,
+                    });
+                }
+
+                return dailyIncomeExpense;
             } catch (error) {
-              console.error('Error generating daily income/expense:', error);
-              throw new Error('Unable to calculate daily income and expense.');
+                console.error('Error generating daily income/expense:', error);
+                throw new Error('Unable to calculate daily income and expense.');
             }
-          },
+        },
+        getIncomeByCategories: async (_, { walletId, startDate, endDate }) => {
+            try {
+                const transactions = await Transaction.find({
+                    walletId,
+                    transactionType: 'INCOME',
+                    transactionDate: { $gte: new Date(startDate), $lte: new Date(endDate) },
+                }).populate('categoryId');
+
+                console.log("transactions", transactions);
+                const datas = [];
+
+                transactions.forEach((transaction) => {
+                    let categoryName = transaction.categoryId.name;
+                    let categoryData = datas.filter((data) => {
+                        return categoryName === data.categoryName;
+                    });
+                    console.log("categoryData", categoryData);
+                    if (categoryData.length > 0) {
+                        categoryData[0].transactionCount = categoryData[0].transactionCount + 1;
+                        categoryData[0].totalAmount = categoryData[0].totalAmount + transaction.amount;
+                    } else {
+                        datas.push({
+                            categoryName: categoryName,
+                            transactionCount: 1,
+                            totalAmount: transaction.amount
+                        });
+                    }
+                })
+
+                return datas;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        getExpenseByCategories: async (_, { walletId, startDate, endDate }) => {
+            try {
+                const transactions = await Transaction.find({
+                    walletId,
+                    transactionType: 'EXPENSE',
+                    transactionDate: { $gte: new Date(startDate), $lte: new Date(endDate) },
+                }).populate('categoryId');
+
+                console.log("transactions", transactions);
+                const datas = [];
+
+                transactions.forEach((transaction) => {
+                    let categoryName = transaction.categoryId.name;
+                    let categoryData = datas.filter((data) => {
+                        return categoryName === data.categoryName;
+                    });
+                    console.log("categoryData", categoryData);
+                    if (categoryData.length > 0) {
+                        categoryData[0].transactionCount = categoryData[0].transactionCount + 1;
+                        categoryData[0].totalAmount = categoryData[0].totalAmount + transaction.amount;
+                    } else {
+                        datas.push({
+                            categoryName: categoryName,
+                            transactionCount: 1,
+                            totalAmount: transaction.amount
+                        });
+                    }
+                })
+
+                return datas;
+            } catch (error) {
+                console.log(error);
+            }
+        }
     },
     Mutation: {
         createTransaction: async (_, { input }) => {

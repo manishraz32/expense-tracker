@@ -11,7 +11,8 @@ const transactionTypeDef = `#graphql
         getTransactions(filter: TransactionFilterInput): [Transaction]
         getBalanceByDate: [AccountBalance!]
         getDailyIncomeExpense(walletId: ID!, startDate: String!, endDate: String!): [ExpenseIncome!]
-
+        getIncomeByCategories(walletId: ID!, startDate: String!, endDate: String!): [DailyIncomeExpenseData]
+        getExpenseByCategories(walletId: ID!, startDate: String!, endDate: String!): [DailyIncomeExpenseData]
     }
 
     type Mutation {
@@ -33,6 +34,13 @@ const transactionTypeDef = `#graphql
         userId: ID!
         walletId: ID!
     }
+
+    type DailyIncomeExpenseData {
+        categoryName: String!
+        transactionCount: Int!
+        totalAmount: Float!
+    }
+
 
     type AccountBalance {
         date: String!
