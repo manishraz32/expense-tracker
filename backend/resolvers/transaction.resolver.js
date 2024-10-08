@@ -1,10 +1,12 @@
 import Transaction from '../models/transaction.model.js';
 import Wallet from '../models/wallet.model.js'
 import { UserInputError } from 'apollo-server-express';
+import { eachDayOfInterval, format } from 'date-fns';
+
 
 const transactionResolvers = {
     Query: {
-        getTransactions: async (_, { filter:filterVal }) => {
+        getTransactions: async (_, { filter: filterVal }) => {
 
             try {
                 // Create the filter object
@@ -39,6 +41,90 @@ const transactionResolvers = {
                 throw new Error('Error fetching transactions: ' + error.message);
             }
         },
+
+        getBalanceByDate: async () => {
+            // Fetch all transactions
+            // Fetch all transactions
+            const transactions = await Transaction.find({}).sort({ transactionDate: 1 }); // Sort by date
+
+            const accountData = [];
+            let balance = 0;
+
+            // Calculate the balance for each date
+            for (const transaction of transactions) {
+                const transactionDate = format(transaction.createdAt, 'yyyy-MM-dd');
+                console.log("transactionDate", transactionDate)
+                if (transaction.transactionType === 'INCOME') {
+                    balance += transaction.amount;
+                } else if (transaction.transactionType === 'EXPENSE') {
+                    balance -= transaction.amount;
+                }
+
+                // Check if the date already exists in accountData
+                const existingEntry = accountData.find(entry => entry.date === transactionDate);
+                if (existingEntry) {
+                    existingEntry.balance = balance; // Update existing balance
+                } else {
+                    accountData.push({ date: transactionDate, balance });
+                }
+            }
+
+            console.log('Generated account data:', accountData);
+            return accountData;
+        },
+        getDailyIncomeExpense: async (_, { walletId, startDate, endDate }) => {
+            try {
+              // Fetch all transactions for the wallet within the date range
+              console.log("input", walletId, startDate, endDate);
+              const transactions = await Transaction.find({
+                walletId,
+                transactionDate: { $gte: new Date(startDate), $lte: new Date(endDate) },
+              }).sort({ transactionDate: 1 });
+      
+              const dailyIncomeExpense = [];
+      
+              // Generate all dates between startDate and endDate
+              const days = eachDayOfInterval({
+                start: new Date(startDate),
+                end: new Date(endDate),
+              });
+      
+              // Iterate over each day and calculate income and expense
+              for (const day of days) {
+                const formattedDay = format(day, 'yyyy-MM-dd');
+      
+                // Get transactions for the current day
+                const dayTransactions = transactions.filter(
+                  (transaction) =>
+                    format(transaction.transactionDate, 'yyyy-MM-dd') === formattedDay
+                );
+      
+                let dailyIncome = 0;
+                let dailyExpense = 0;
+      
+                // Sum up income and expense for the day
+                dayTransactions.forEach((transaction) => {
+                  if (transaction.transactionType === 'INCOME') {
+                    dailyIncome += transaction.amount;
+                  } else if (transaction.transactionType === 'EXPENSE') {
+                    dailyExpense += transaction.amount;
+                  }
+                });
+      
+                // Push the result for the current day
+                dailyIncomeExpense.push({
+                  date: formattedDay,
+                  income: dailyIncome,
+                  expense: dailyExpense,
+                });
+              }
+      
+              return dailyIncomeExpense;
+            } catch (error) {
+              console.error('Error generating daily income/expense:', error);
+              throw new Error('Unable to calculate daily income and expense.');
+            }
+          },
     },
     Mutation: {
         createTransaction: async (_, { input }) => {

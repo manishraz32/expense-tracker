@@ -14,6 +14,8 @@ import { GET_WALLET_BY_ID } from '../graphql/queries/wallet.query';
 import { GET_TRANSACTIONS } from '../graphql/queries/transaction.query';
 import toast from 'react-hot-toast'
 import BalanceStatusCard from '../components/BalanceStatusCard';
+import CustomAreaChart from '../components/CustomAreaCharts';
+import { format } from 'date-fns';
 
 const Overview = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -108,7 +110,19 @@ const Overview = () => {
     setIncomeModalOpen(false);
   };
 
+  // datas
+  const accountData = [
+    { date: '2024-01-01', balance: 500 },
+    { date: '2024-01-05', balance: 5000 },
+    { date: '2024-01-10', balance: 1000 },
+    { date: '2024-01-15', balance: 500 }
+  ];
 
+  // Format the date
+  const sampleData = accountData.map(entry => ({
+    ...entry,
+    date: format(new Date(entry.date), 'MMM dd, yyyy'), // 'Oct 06, 2024' format
+  }));
 
   return (
     <div className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
@@ -195,17 +209,29 @@ const Overview = () => {
         <BalanceStatusCard />
       </div>
       <div className="flex flex-col gap-2">
-        <div className="w-full h-[400px] bg-[#fff] rounded-lg">
-          <AccountBalanceChart />
+        <div className="flex flex-col gap-4 lg:flex-row">
+          <div className="w-full h-[400px] bg-[#fff] rounded-lg">
+            <CustomAreaChart
+              data={sampleData}
+              xKey="date"
+              yKey="balance"
+              fillColor="#bbf7d0"
+              strokeColor="#16a34a"
+            />
+          </div>
+          <div className="w-full h-[400px] bg-[#fff] rounded-lg">
+            <MoneyChangesChart />
+          </div>
         </div>
-        <div className="w-full h-[400px] bg-[#fff] rounded-lg">
-          <MoneyChangesChart />
-        </div>
-        <div className="w-full h-[400px] bg-[#fff] rounded-lg">
-          <IncomeChart />
-        </div>
-        <div className="w-full h-[400px] bg-[#fff] rounded-lg">
-          <ExpenceChart />
+        <div className="flex flex-col gap-4 lg:flex-row">
+          <div className="w-full h-[400px] bg-[#fff] rounded-lg p-4">
+            <p className="font-semibold">Total Income</p>
+            <IncomeChart />
+          </div>
+          <div className="w-full h-[400px] bg-[#fff] rounded-lg p-4">
+            <p className="font-semibold">Total Expense</p>
+            <ExpenceChart />
+          </div>
         </div>
       </div>
     </div>
