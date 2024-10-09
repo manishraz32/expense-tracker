@@ -18,3 +18,33 @@ export const GET_TRANSACTIONS = gql`
 		}
 	}
 `;
+
+export const GET_DAILY_INCOME_EXPENCE = gql`
+	query GetDailyIncomeExpense($walletId: ID!, $startDate: String!, $endDate: String!) {
+	  getDailyIncomeExpense(walletId: $walletId, startDate: $startDate, endDate: $endDate) {
+	    date
+	    expense
+	    income
+	  }
+	}
+`
+
+export const GET_INCOME_BY_CATEGORIES = gql`
+	query GetIncomeByCategories($walletId: ID!, $startDate: String!, $endDate: String!) {
+	  getIncomeByCategories(walletId: $walletId, startDate: $startDate, endDate: $endDate) {
+	    categoryName
+	    totalAmount
+	    transactionCount
+	  }
+	}
+`
+
+export const GET_EXPENCE_BY_CATEGORIES = gql`
+	query GetExpenseByCategories($walletId: ID!, $startDate: String!, $endDate: String!) {
+  		getExpenseByCategories(walletId: $walletId, startDate: $startDate, endDate: $endDate) {
+  		  categoryName
+  		  transactionCount
+  		  totalAmount
+  		}
+	}
+`

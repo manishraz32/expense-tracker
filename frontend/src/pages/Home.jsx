@@ -143,8 +143,7 @@ const Home = () => {
   }
 
 
-
-
+  
   console.log("data", data);
   const categories = ['Food', 'Transportation', 'Shopping', 'Health', 'Education'];
   const categories1 = ['Food1', 'Transportation1', 'Shopping1', 'Health1', 'Education1'];

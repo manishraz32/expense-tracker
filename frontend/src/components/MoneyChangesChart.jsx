@@ -1,22 +1,20 @@
 import React from 'react';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const data = [
-  { day: 'Oct 07, 2024', Expense: 0, Income: 0 },
-  { day: 'Oct 07, 2024', Expense: -3000, Income: 1398 },
-  { day: 'Oct 07, 2024', Expense: -2000, Income: 9800 },
-  { day: 'Oct 07, 2024', Expense: -2780, Income: 3908 },
-  { day: 'Oct 07, 2024', Expense: -1890, Income: 4800 },
-  { day: 'Oct 07, 2024', Expense: -2390, Income: 3800 },
-  { day: 'Oct 07, 2024', Expense: -3490, Income: 4300 },
-];
-
-const MoneyChangesChart = () => {
+const CustomBarChart = ({
+  data,
+  xKey = "day",
+  expenseKey = "expense",
+  incomeKey = "income",
+  width = "100%",
+  height = 400,
+  barSize = 5,
+  expenseColor = "#f14c52",
+  incomeColor = "#82ca9d"
+}) => {
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width={width} height={height}>
       <BarChart
-        width={500}
-        height={300}
         data={data}
         margin={{
           top: 5,
@@ -26,16 +24,25 @@ const MoneyChangesChart = () => {
         }}
       >
         <CartesianGrid strokeDasharray="1 1" />
-        <XAxis dataKey="day" />
+        <XAxis dataKey={xKey} />
         <YAxis />
         <Tooltip />
         <Legend />
-        {/* Apply barSize to control the width of bars */}
-        <Bar dataKey="Expense" fill="#8884d8" barSize={5} activeBar={<Rectangle fill="pink" stroke="blue" />} />
-        <Bar dataKey="Income" fill="#82ca9d" barSize={5} activeBar={<Rectangle fill="gold" stroke="purple" />} />
+        <Bar
+          dataKey={expenseKey}
+          fill={expenseColor}
+          barSize={barSize}
+          activeBar={<Rectangle />}
+        />
+        <Bar
+          dataKey={incomeKey}
+          fill={incomeColor}
+          barSize={barSize}
+          activeBar={<Rectangle />}
+        />
       </BarChart>
     </ResponsiveContainer>
   );
 };
 
-export default MoneyChangesChart;
+export default CustomBarChart;
