@@ -6,14 +6,36 @@ import BudgetModal from '../components/BudgetModal';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_BUDGET } from '../graphql/mutations/budget.mutations';
 import toast from 'react-hot-toast'
+import { GET_BUDGETS } from '../graphql/queries/budget.query';
+import WalletBalanceCard from '../components/WalletBalanceCard';
+import { convertDateFormat } from '../utils/datetimeutils'
+
+
+
+
 const BudgetPage = () => {
     const user = JSON.parse(localStorage.getItem('user'));
-
+    const [budget, setBudget] = useState(null);
     const { data: modalData, error, loading } = useQuery(GET_WALLET_BY_ID, {
         variables: { id: user?.wallet?._id }
     })
+
+    const { data: budgetsData } = useQuery(GET_BUDGETS, {
+        variables: { userId: user?._id }
+    });
+
+    console.log("budgetsData", budgetsData);
+
+    useEffect(() => {
+        console.log(budgetsData);
+        if (budgetsData?.getBudgetsByUser?.length > 0) {
+            setBudget(budgetsData.getBudgetsByUser[0]);
+        }
+    }, [budgetsData])
+
+
+
     const { data: expenseCategoresData, error: expenseError, loading: expenseLoading } = useQuery(GET_EXPENSE_CATEGORIES)
-    console.log("expenseCategoresData: ", expenseCategoresData);
     const [openDialog, setOpenDialog] = useState(false); // State to control dialog visibility
     const [formData, setFormData] = useState({
         amount: '',
@@ -24,9 +46,9 @@ const BudgetPage = () => {
         startDate: '',
         userId: '',
         walletId: ''
-      });
+    });
 
-      const [createBudget, { data, loading:createBudgetLoading, error:createBudgetError }] = useMutation(CREATE_BUDGET)
+    const [createBudget, { data, loading: createBudgetLoading, error: createBudgetError }] = useMutation(CREATE_BUDGET)
 
     // Example categories and currencies (you can replace this with real data)
     const categories = [
@@ -47,27 +69,27 @@ const BudgetPage = () => {
 
     const handleSubmit = async () => {
         try {
-          const response = await createBudget({
-            variables: {
-              input: {
-                amount: parseFloat(formData.amount),
-                budgetName: formData.budgetName,
-                budgetPeriod: 'monthly',
-                categories: formData.categories.map((category) => category._id),
-                currency: 'INR',
-                startDate: formData.startDate,
-                userId: user?._id,
-                walletId: user?.wallet._id
-              },
-            },
-          });
-          toast.success("Budget create successfully");
-          typeFromAST
-          console.log('Budget created:', response.data.createBudget);
+            const response = await createBudget({
+                variables: {
+                    input: {
+                        amount: parseFloat(formData.amount),
+                        budgetName: formData.budgetName,
+                        budgetPeriod: 'monthly',
+                        categories: formData.categories.map((category) => category._id),
+                        currency: 'INR',
+                        startDate: formData.startDate,
+                        userId: user?._id,
+                        walletId: user?.wallet._id
+                    },
+                },
+            });
+            toast.success("Budget create successfully");
+            typeFromAST
+            console.log('Budget created:', response.data.createBudget);
         } catch (err) {
-          console.error('Error creating budget:', err);
+            console.error('Error creating budget:', err);
         }
-      };
+    };
     return (
         <div className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
             <BudgetModal
@@ -81,33 +103,72 @@ const BudgetPage = () => {
                 currencies={currencies}
             />
             <div className="flex flex-col gap-4 lg:flex-row">
-                <div className="p-[15px] shadow-custom bg-white flex flex-col gap-3 rounded-lg">
-                    <div>
-                        <h1 className="font-semibold text-[18px] text-gray-925">Test</h1>
-                        <p className="text-sm text-gray-450"> All Wallets</p>
-                    </div>
-                    <div>
-                        <p className="text-gray-450"><span className="text-[20px] font-bold text-green-app">2000.00 USD </span>left</p>
-                        <p className="text-gray-450 text-sm"> FROM 7000 USD</p>
-                    </div>
-                    <div className="w-full lg:w-80">
+                {
+                    budget && <div className="p-[15px] shadow-custom bg-white flex flex-col gap-3 rounded-lg border-[2px] border-solid border-green-app">
                         <div>
-                            <CommonProgressBar value={50} />
+                            <h1 className="font-semibold text-[18px] text-gray-925">{budget?.budgetName}</h1>
                         </div>
-                        <div className="flex justify-between mt-1">
-                            <p className="text-gray-450 text-sm">Sep 19, 2024</p>
-                            <p className="text-gray-450 text-sm">Oct 19, 2024</p>
+                        <div>
+                            <p className="text-gray-450"><span className="text-[20px] font-bold text-green-app">{budget.moneyLeft} INR </span>left</p>
+                            <p className="text-gray-450 text-sm"> FROM {budget.amount} INR</p>
+                        </div>
+                        <div className="w-full lg:w-80">
+                            <div>
+                                <CommonProgressBar value={50} />
+                            </div>
+                            <div className="flex justify-between mt-1">
+                                <p className="text-gray-450 text-sm">{convertDateFormat(budget.startDate)}</p>
+                                <p className="text-gray-450 text-sm">{convertDateFormat(budget.endDate)}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
                 <div className="px-[15px] w-full lg:w-80 py-10 shadow-custom bg-white flex flex-col gap-3 rounded-lg">
                     <p className="text-sm text-gray-450 text-center">Take control of your expenses and save more money with budgets!</p>
-                    <button 
+                    <button
                         className="w-full bg-green-button py-2 flex items-center justify-center rounded text-white text-sm font-semibold"
                         onClick={handleOpenDialog}
                     >
                         Create a New Budget
                     </button>
+                </div>
+            </div>
+            <div className="flex  w-full flex-row gap-4 overflow-auto">
+                <div className='flex-1'>
+                    <WalletBalanceCard
+                        headerName="Current Wallet Balance"
+                        balance={100}
+                    />
+                </div>
+                <div className='flex-1'>
+                    <WalletBalanceCard
+                        headerName="Current Wallet Balance"
+                        balance={100}
+                    />
+                </div>
+                <div className='flex-1'>
+                    <WalletBalanceCard
+                        headerName="Current Wallet Balance"
+                        balance={100}
+                    />
+                </div>
+                <div className='flex-1'>
+                    <WalletBalanceCard
+                        headerName="Current Wallet Balance"
+                        balance={100}
+                    />
+                </div>
+            </div>
+            <div className="flex flex-col gap-10 p-4 pb-8 w-full bg-white rounded-lg">
+                <div className="text-gray-925 text-lg">Budget progress</div>
+                <div className="flex w-full justify-center">
+                    <div className="flex flex-col gap-10 w-[60%]">
+                        <div className="text-center text-gray-925">Keep spending You can spend <span className="text-black text-lg font-semibold">16.13 INR</span> each day for the rest of the period.</div>
+                        <CommonProgressBar value={50} />
+                    </div>
+                </div>
+                <div className="flex justify-center">
+                    <div className="bg-green-400 p-2 text-white">Keep Spending</div>
                 </div>
             </div>
         </div>

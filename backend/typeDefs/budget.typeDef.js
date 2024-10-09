@@ -6,6 +6,7 @@ const budgetTypeDef = `#graphql
     spentSoFar: Float!
     moneyLeft: Float!
     dailyLimit: Float!
+    categories:[ID!]!
     budgetPeriod: String!
     startDate: String!
     endDate: String!
@@ -16,7 +17,7 @@ const budgetTypeDef = `#graphql
 
   type Query {
     getBudget(budgetId: ID!): Budget
-    getBudgetsByUser(userId: ID!): [Budget!]!  # Query to get budgets for a user
+    getBudgetsByUser(userId: ID!): [Budget!]
   }
 
   type Mutation {

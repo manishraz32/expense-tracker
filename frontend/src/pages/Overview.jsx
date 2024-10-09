@@ -13,8 +13,8 @@ import BalanceStatusCard from '../components/BalanceStatusCard';
 import CustomAreaChart from '../components/CustomAreaCharts';
 import { format } from 'date-fns';
 import CustomBarChart from '../components/MoneyChangesChart';
-import { getCurrentMonthDates } from '../utils/ getCurrentMonthDates';
 import CustomPieChart from '../components/CustomPieChart';
+import { getCurrentMonthDates } from '../utils/datetimeutils';
 
 const Overview = () => {
   const user = JSON.parse(localStorage.getItem('user'));

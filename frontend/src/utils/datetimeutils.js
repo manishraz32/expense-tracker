@@ -11,3 +11,15 @@ export const getCurrentMonthDates = () => {
     // console.log("formattedStartDate", startDate.toISOString());
     return { startDate: formattedStartDate, endDate: formattedEndDate };
   };
+
+
+  export const convertDateFormat = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: '2-digit' };
+    const date = new Date(dateString);
+    
+    // Get the formatted date components
+    const formattedDate = date.toLocaleDateString('en-US', options);
+    
+    // Add a comma after the day and return the formatted string
+    return formattedDate.replace(' ', ' ').replace(',', ', ');
+  };
