@@ -1,5 +1,6 @@
 import Budget from '../models/budget.model.js'; // Adjust the import path as necessary
 import User from '../models/user.model.js'; // Adjust the import path as necessary
+import Wallet from '../models/wallet.model.js';
 
 const budgetResolver = {
   Query: {
@@ -42,10 +43,10 @@ const budgetResolver = {
   Mutation: {
     createBudget: async (_, { input }, context) => {
       try {
-        const { budgetName, amount, spentSoFar, budgetPeriod, startDate, userId } = input;
+        const { budgetName, currency, amount, categories, budgetPeriod, startDate, walletId, userId } = input;
 
         // Validate input fields
-        if (!budgetName || !amount || !userId || !startDate) {
+        if (!budgetName ||  !currency || !amount || !categories || !budgetPeriod || !startDate || !walletId || !userId) {
           throw new Error('All required fields must be provided');
         }
 
@@ -55,15 +56,21 @@ const budgetResolver = {
           throw new Error('User not found');
         }
 
+        const wallet = await Wallet.findById(walletId);
+        if(!wallet) {
+          throw new Error("Wallet not found");
+        }
+
         // Create a new budget
         const newBudget = new Budget({
           budgetName,
           amount,
-          spentSoFar: spentSoFar || 0, // Default to 0 if not provided
           budgetPeriod: budgetPeriod || 'monthly', // Default to 'monthly' if not provided
           startDate: new Date(startDate), // Store as a Date
           endDate: new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 30)), // Default end date to 30 days after start date
+          walletId,
           userId,
+          categories: categories
         });
 
         // Save the budget to the database
@@ -72,10 +79,10 @@ const budgetResolver = {
         // Return the new budget with date fields formatted as strings
         return {
           ...newBudget._doc,
-          startDate: newBudget.startDate.toISOString(), // Convert to string
-          endDate: newBudget.endDate.toISOString(),     // Convert to string
-          createdAt: newBudget.createdAt.toISOString(), // Convert to string
-          updatedAt: newBudget.updatedAt.toISOString(), // Convert to string
+          startDate: newBudget.startDate.toISOString(),
+          endDate: newBudget.endDate.toISOString(),
+          createdAt: newBudget.createdAt.toISOString(),
+          updatedAt: newBudget.updatedAt.toISOString(),
         };
       } catch (err) {
         console.error('Error in createBudget: ', err);

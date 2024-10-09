@@ -1,3 +1,4 @@
+import Budget from '../models/budget.model.js';
 import Transaction from '../models/transaction.model.js';
 import Wallet from '../models/wallet.model.js'
 import { UserInputError } from 'apollo-server-express';
@@ -242,6 +243,34 @@ const transactionResolvers = {
                 if (!wallet) {
                     throw new UserInputError('Wallet not found.');
                 }
+                
+
+                // update the budget if the transaction belong to  budget categories
+                if (transactionType === 'EXPENSE') {
+                    console.log("walletId: ", walletId);
+                  
+                    // Find budget by walletId and ensure the transaction date is within the budget period
+                    const budget = await Budget.findOne({
+                      walletId: walletId,
+                      startDate: { $lte: transactionDate }, // Ensure startDate <= transactionDate
+                      endDate: { $gte: transactionDate },   // Ensure endDate >= transactionDate
+                    });
+                  
+                    if (budget) {
+                      console.log("budget: ", budget);
+                  
+                      const categories = budget.categories;
+                      console.log("categories", categories);
+                  
+                      // Check if the category exists in the budget's categories
+                      if (categories.includes(categoryId)) {
+                        budget.spentSoFar += amount; // Update the spent amount
+                        await budget.save(); // Save the updated budget
+                      }
+                    }
+                  }
+                  
+
 
                 // Update wallet fields
                 wallet.spentSoFar += walletUpdate.spentSoFar || 0; // Update spentSoFar if it's an expense

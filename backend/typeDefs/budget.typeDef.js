@@ -2,12 +2,13 @@ const budgetTypeDef = `#graphql
   type Budget {
     _id: ID!
     budgetName: String!
-    amount: Float!  # Changed to Float to allow decimal amounts
+    amount: Float!
     spentSoFar: Float!
     moneyLeft: Float!
+    dailyLimit: Float!
     budgetPeriod: String!
-    startDate: String!  # Change to String
-    endDate: String!    # Change to String
+    startDate: String!
+    endDate: String!
     userId: ID!
     createdAt: String!
     updatedAt: String!
@@ -24,10 +25,12 @@ const budgetTypeDef = `#graphql
 
   input BudgetInput {
     budgetName: String!
+    currency: String!
     amount: Float!
-    spentSoFar: Float
-    budgetPeriod: String # Optional field
-    startDate: String!   # Change to String
+    categories:[ID!]!
+    budgetPeriod: String!
+    startDate: String!
+    walletId: ID!
     userId: ID!
   }
 `;

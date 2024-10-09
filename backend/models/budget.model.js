@@ -22,6 +22,10 @@ const budgetSchema = new mongoose.Schema({
       return this.amount - this.spentSoFar; // Calculate money left from the start
     },
   },
+  dailyLimit: {
+    type: Number,
+    default: 0, // Default to 0 initially
+  },
   budgetPeriod: {
     type: String,
     required: true,
@@ -35,7 +39,7 @@ const budgetSchema = new mongoose.Schema({
   endDate: {
     type: Date,
     required: true,
-    default: function() {
+    default: function () {
       // Set endDate to 30 days after startDate if startDate is provided
       if (this.startDate) {
         const endDate = new Date(this.startDate);
@@ -51,11 +55,21 @@ const budgetSchema = new mongoose.Schema({
       message: 'End date must be after the start date',
     },
   },
+  walletId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Wallet',
+    required: true
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Reference to the User model
     required: true,
   },
+  categories: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true,
+  }],
   createdAt: {
     type: Date,
     default: Date.now,
@@ -66,10 +80,15 @@ const budgetSchema = new mongoose.Schema({
   },
 });
 
-// Pre-save hook to update 'updatedAt' automatically before saving
+// Pre-save hook to update 'updatedAt' and 'dailyLimit' automatically before saving
 budgetSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   this.moneyLeft = this.amount - this.spentSoFar; // Calculate money left whenever saved
+  
+  // Calculate daily spending limit based on the duration of the budget
+  const budgetDuration = (this.endDate - this.startDate) / (1000 * 60 * 60 * 24); // Duration in days
+  this.dailyLimit = this.moneyLeft / budgetDuration; // Calculate daily limit
+  
   next();
 });
 
