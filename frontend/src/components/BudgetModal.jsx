@@ -7,14 +7,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Box, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { Box, MenuItem, Select, FormControl, InputLabel, Checkbox } from '@mui/material';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 const BudgetModal = ({ open, onClose, onSubmit, formData, setFormData, title, categories, currencies }) => {
   const [errors, setErrors] = useState({
     budgetName: false,
     amount: false,
     currency: false,
-    category: false,
+    categories: false,
     startDate: false,
   });
 
@@ -27,9 +29,10 @@ const BudgetModal = ({ open, onClose, onSubmit, formData, setFormData, title, ca
   };
 
   const handleCategoryChange = (event, value) => {
+    console.log("value", value);
     setFormData((prev) => ({
       ...prev,
-      category: value,
+      categories: value,
     }));
   };
 
@@ -38,7 +41,7 @@ const BudgetModal = ({ open, onClose, onSubmit, formData, setFormData, title, ca
       budgetName: !formData.budgetName,
       amount: !formData.amount || formData.amount <= 0,
       currency: !formData.currency,
-      category: !formData.category,
+      categories: !formData.categories || formData.categories.length === 0,
       startDate: !formData.startDate,
     };
     setErrors(newErrors);
@@ -46,6 +49,7 @@ const BudgetModal = ({ open, onClose, onSubmit, formData, setFormData, title, ca
   };
 
   const handleSubmit = () => {
+    console.log("formData", formData);
     if (validateForm()) {
       onSubmit(); 
     }
@@ -147,20 +151,33 @@ const BudgetModal = ({ open, onClose, onSubmit, formData, setFormData, title, ca
             {errors.currency && <p style={{ color: 'red' }}>Please select a currency</p>}
           </FormControl>
 
-          {/* All Categories */}
+          {/* All Categories (Multiple Select with Checkboxes) */}
           <Autocomplete
+            multiple
             options={categories}
+            disableCloseOnSelect
             getOptionLabel={(option) => option ? `${option.name} (${option.categoryType})` : ""}
-            value={formData.category || null}
+            value={formData.categories || []}
             onChange={handleCategoryChange}
+            renderOption={(props, option, { selected }) => (
+              <li {...props}>
+                <Checkbox
+                  icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                  checkedIcon={<CheckBoxIcon fontSize="small" />}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                />
+                {`${option.name} (${option.categoryType})`}
+              </li>
+            )}
             renderInput={(params) => (
               <TextField
                 {...params}
                 label="All Categories"
                 margin="dense"
                 fullWidth
-                error={errors.category}
-                helperText={errors.category && 'Please select a category'}
+                error={errors.categories}
+                helperText={errors.categories && 'Please select at least one category'}
               />
             )}
           />

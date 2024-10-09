@@ -3,9 +3,9 @@ import CommonProgressBar from '../components/CommonProgressBar';
 import { GET_WALLET_BY_ID } from '../graphql/queries/wallet.query';
 import { GET_EXPENSE_CATEGORIES } from '../graphql/queries/category.query';
 import BudgetModal from '../components/BudgetModal';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_BUDGET } from '../graphql/mutations/budget.mutations';
-
+import toast from 'react-hot-toast'
 const BudgetPage = () => {
     const user = JSON.parse(localStorage.getItem('user'));
 
@@ -13,7 +13,7 @@ const BudgetPage = () => {
         variables: { id: user?.wallet?._id }
     })
     const { data: expenseCategoresData, error: expenseError, loading: expenseLoading } = useQuery(GET_EXPENSE_CATEGORIES)
-
+    console.log("expenseCategoresData: ", expenseCategoresData);
     const [openDialog, setOpenDialog] = useState(false); // State to control dialog visibility
     const [formData, setFormData] = useState({
         amount: '',
@@ -26,7 +26,7 @@ const BudgetPage = () => {
         walletId: ''
       });
 
-      const [createBudget, { data, loading:createBudgetLoading, error:createBudgetError }] = useMutation(CREATE_BUDGET;
+      const [createBudget, { data, loading:createBudgetLoading, error:createBudgetError }] = useMutation(CREATE_BUDGET)
 
     // Example categories and currencies (you can replace this with real data)
     const categories = [
@@ -45,12 +45,29 @@ const BudgetPage = () => {
         setOpenDialog(false); // Close the dialog
     };
 
-    const handleSubmit = () => {
-        // Handle form submission here (e.g., send the data to the backend or update state)
-        console.log('Form submitted:', formData);
-        handleCloseDialog(); // Close the dialog after submission
-    };
-
+    const handleSubmit = async () => {
+        try {
+          const response = await createBudget({
+            variables: {
+              input: {
+                amount: parseFloat(formData.amount),
+                budgetName: formData.budgetName,
+                budgetPeriod: 'monthly',
+                categories: formData.categories.map((category) => category._id),
+                currency: 'INR',
+                startDate: formData.startDate,
+                userId: user?._id,
+                walletId: user?.wallet._id
+              },
+            },
+          });
+          toast.success("Budget create successfully");
+          typeFromAST
+          console.log('Budget created:', response.data.createBudget);
+        } catch (err) {
+          console.error('Error creating budget:', err);
+        }
+      };
     return (
         <div className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
             <BudgetModal
@@ -60,7 +77,7 @@ const BudgetPage = () => {
                 formData={formData}
                 setFormData={setFormData}
                 title="Create New Budget"
-                categories={categories}
+                categories={expenseCategoresData?.getExpenseCategories}
                 currencies={currencies}
             />
             <div className="flex flex-col gap-4 lg:flex-row">
