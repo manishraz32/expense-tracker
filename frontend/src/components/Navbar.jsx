@@ -16,17 +16,33 @@ import { useApolloClient, useMutation } from '@apollo/client';
 import { LOGOUT } from '../graphql/mutations/user.mutations';
 import { Login } from '@mui/icons-material';
 import { GET_AUTHENTICATED_USER } from '../graphql/queries/user.query';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const pages = ['transaction', 'overview', 'budgets', 'Wallet Settings'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pagesObj = { '/': 'transaction', '/overview': 'overview', '/budgets': 'budgets', '/wallet-settings': 'Wallet Settings' }
+const settings = ['Logout'];
 
 function Navbar() {
+  const user = JSON.parse(localStorage.getItem('user'));
   const client = useApolloClient();
   const [logout, { loading }] = useMutation(LOGOUT);
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  console.log("currentPath", currentPath);
+
+
+
+  const [selectedPage, setSelectedPage] = React.useState('transaction');
+
+  React.useEffect(() => {
+    setSelectedPage(pagesObj[currentPath]);
+  }, [])
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -64,7 +80,7 @@ function Navbar() {
             logout: true,
           },
         });
-        
+
         // Clear store to ensure all data is removed
         // await client.clearStore(); 
         localStorage.clear();
@@ -90,22 +106,24 @@ function Navbar() {
     e.preventDefault();
     if (page === 'Wallet Settings') {
       navigate('/wallet-settings');
+      setSelectedPage('Wallet Settings');
     } else if (page === 'transaction') {
       navigate('/');
+      setSelectedPage('transaction');
     } else {
       navigate(`/${page}`);
+      setSelectedPage(page);
     }
     handleCloseNavMenu();
   }
 
   return (
     <AppBar
-      position="static"
-      sx={{ backgroundColor: '#12C48B' }}
+      position="sticky" // Change this to sticky
+      sx={{ backgroundColor: '#12C48B', top: 0, zIndex: 1201 }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -121,7 +139,7 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            Expense Tracker
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -182,7 +200,16 @@ function Navbar() {
               <Button
                 key={page}
                 onClick={(e) => handleNavClick(e, page)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{
+                  my: 2,
+                  color: selectedPage === page ? '#1DE9B6' : '#FFFFFF', // Soft teal for active text
+                  display: 'block',
+                  borderBottom: selectedPage === page
+                    ? '2px solid linear-gradient(to right, #1DE9B6, #A7FFEB)' // Gradient underline for active
+                    : 'none',
+                  transition: 'color 0.3s, border-bottom 0.3s', // Smooth transition for a better experience
+                }}
+                aria-current={selectedPage === page ? 'page' : undefined} // Accessibility
               >
                 {page}
               </Button>
@@ -191,7 +218,7 @@ function Navbar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={user?.name} src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu

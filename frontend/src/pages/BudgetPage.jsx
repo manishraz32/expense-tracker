@@ -16,6 +16,7 @@ import { convertDateFormat } from '../utils/datetimeutils'
 const BudgetPage = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     const [budget, setBudget] = useState(null);
+    const [precentage, setPercentage] = useState(0);
     const { data: modalData, error, loading } = useQuery(GET_WALLET_BY_ID, {
         variables: { id: user?.wallet?._id }
     })
@@ -28,9 +29,21 @@ const BudgetPage = () => {
 
     useEffect(() => {
         console.log(budgetsData);
+        let currentBudget = null;
         if (budgetsData?.getBudgetsByUser?.length > 0) {
             setBudget(budgetsData.getBudgetsByUser[0]);
+            currentBudget = budgetsData.getBudgetsByUser[0];
         }
+        const total = currentBudget?.amount;
+        const spent = currentBudget?.spentSoFar;
+        console.log("total spent", total, spent);
+        if(total == 0) {
+            setPercentage(0);
+            return;
+        }
+        const precent = (spent / total) * 100;
+        console.log(precent);
+        setPercentage(precent);
     }, [budgetsData])
 
 
@@ -114,7 +127,7 @@ const BudgetPage = () => {
                         </div>
                         <div className="w-full lg:w-80">
                             <div>
-                                <CommonProgressBar value={50} />
+                                <CommonProgressBar value={precentage || 0} />
                             </div>
                             <div className="flex justify-between mt-1">
                                 <p className="text-gray-450 text-sm">{convertDateFormat(budget.startDate)}</p>
@@ -134,29 +147,21 @@ const BudgetPage = () => {
                 </div>
             </div>
             <div className="flex  w-full flex-row gap-4 overflow-auto">
-                <div className='flex-1'>
-                    <WalletBalanceCard
-                        headerName="Current Wallet Balance"
-                        balance={100}
-                    />
+                <div className="px-[15px] py-3 bg-white rounded-lg flex-1">
+                    <p className="text-[#455A65] font-semibold tracking-wide">Originally Budgeted</p>
+                    <p className={`text-[24px] font-semibold text-green-app tracking-wider min-w-[240px]`}>{budget?.amount} INR</p>
                 </div>
-                <div className='flex-1'>
-                    <WalletBalanceCard
-                        headerName="Current Wallet Balance"
-                        balance={100}
-                    />
+                <div className="px-[15px] py-3 bg-white rounded-lg flex-1">
+                    <p className="text-[#455A65] font-semibold tracking-wide">Spent so far</p>
+                    <p className={`text-[24px] font-semibold text-red-app tracking-wider min-w-[240px]`}>-{budget?.spentSoFar} INR</p>
                 </div>
-                <div className='flex-1'>
-                    <WalletBalanceCard
-                        headerName="Current Wallet Balance"
-                        balance={100}
-                    />
+                <div className="px-[15px] py-3 bg-white rounded-lg flex-1">
+                    <p className="text-[#455A65] font-semibold tracking-wide">Money left</p>
+                    <p className={`text-[24px] font-semibold text-green-app tracking-wider min-w-[240px]`}>{budget?.moneyLeft} INR</p>
                 </div>
-                <div className='flex-1'>
-                    <WalletBalanceCard
-                        headerName="Current Wallet Balance"
-                        balance={100}
-                    />
+                <div className="px-[15px] py-3 bg-white rounded-lg flex-1">
+                    <p className="text-[#455A65] font-semibold tracking-wide">You can spend</p>
+                    <p className={`text-[24px] font-semibold text-gray-700 tracking-wider min-w-[240px]`}>{budget?.dailyLimit.toFixed(2) } INR/DAY</p>
                 </div>
             </div>
             <div className="flex flex-col gap-10 p-4 pb-8 w-full bg-white rounded-lg">
@@ -164,7 +169,7 @@ const BudgetPage = () => {
                 <div className="flex w-full justify-center">
                     <div className="flex flex-col gap-10 w-[60%]">
                         <div className="text-center text-gray-925">Keep spending You can spend <span className="text-black text-lg font-semibold">16.13 INR</span> each day for the rest of the period.</div>
-                        <CommonProgressBar value={50} />
+                        <CommonProgressBar value={precentage} />
                     </div>
                 </div>
                 <div className="flex justify-center">
