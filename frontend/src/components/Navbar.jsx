@@ -128,7 +128,11 @@ function Navbar() {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/');
+            }}
+            className="cursor-pointer"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },

@@ -12,15 +12,16 @@ function NotFoundPage() {
 
   return (
     <Container
+      className="h-full items-center justify-center"
       sx={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
         textAlign: 'center',
-        padding: '40px 20px', // Add some padding for spacing
-        backgroundColor: '#F5F5F5', // Light background color
-        minHeight: '100%', // Ensure it stretches to at least fit the content
+        padding: '40px 20px',
+        backgroundColor: '#F5F5F5',
+        minHeight: '100%',
       }}
     >
       <Box sx={{ mb: 4 }}>

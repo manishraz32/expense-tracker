@@ -290,12 +290,12 @@ const Overview = () => {
             {
               incomeByCategories?.getIncomeByCategories.map(({categoryName, totalAmount, transactionCount}) => (
                 <div className="flex items-center justify-between mt-4">
-                  <div className="flex items-center gap-2">
+                  <div className="flex-1 flex items-center gap-2">
                     <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full text-white bg-green-app">{categoryName.charAt(0).toUpperCase()}</div>
                     <div className="text-gray-925 font-normal text-lg">{categoryName}</div>
                   </div>
-                  <div className="text-gray-925 font-normal text-lg"> {transactionCount} Transactions</div>
-                  <div className="text-lg text-green-app font-bold">+{totalAmount.toFixed(2)} INR</div>
+                  <div className="text-gray-925 flex-1 font-normal text-lg"> {transactionCount} Transactions</div>
+                  <div className="text-lg text-green-app flex-1 font-bold">+{totalAmount.toFixed(2)} INR</div>
                 </div>
               ))
             }
@@ -315,12 +315,12 @@ const Overview = () => {
             {
               expenseByCategories?.getExpenseByCategories.map(({categoryName, totalAmount, transactionCount}) => (
                 <div className="flex items-center justify-between mt-4">
-                  <div className="flex items-center gap-2">
+                  <div className="flex-1 flex items-center gap-2">
                     <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full text-white bg-red-app">{categoryName.charAt(0).toUpperCase()}</div>
                     <div className="text-gray-925 font-normal text-lg">{categoryName}</div>
                   </div>
-                  <div className="text-gray-925 font-normal text-lg"> {transactionCount} Transactions</div>
-                  <div className="text-lg text-red-app font-bold">-{totalAmount.toFixed(2)} INR</div>
+                  <div className="text-gray-925 font-normal text-lg flex-1"> {transactionCount} Transactions</div>
+                  <div className="text-lg text-red-app font-bold flex-1">-{totalAmount.toFixed(2)} INR</div>
                 </div>
               ))
             }

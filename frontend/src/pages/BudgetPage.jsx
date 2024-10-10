@@ -11,7 +11,7 @@ import WalletBalanceCard from '../components/WalletBalanceCard';
 import { convertDateFormat } from '../utils/datetimeutils'
 
 
-
+const currencies = ['INR'];
 
 const BudgetPage = () => {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -62,15 +62,6 @@ const BudgetPage = () => {
     });
 
     const [createBudget, { data, loading: createBudgetLoading, error: createBudgetError }] = useMutation(CREATE_BUDGET)
-
-    // Example categories and currencies (you can replace this with real data)
-    const categories = [
-        { name: 'Food', categoryType: 'Expense' },
-        { name: 'Salary', categoryType: 'Income' },
-        // Add more categories as needed
-    ];
-
-    const currencies = ['INR', 'USD', 'EUR']; // Example currencies
 
     const handleOpenDialog = () => {
         setOpenDialog(true); // Open the dialog
