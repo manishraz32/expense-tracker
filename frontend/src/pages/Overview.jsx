@@ -261,14 +261,17 @@ const Overview = () => {
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-4 lg:flex-row">
-          <div className="w-full h-[400px] bg-[#fff] rounded-lg">
-            <CustomAreaChart
-              data={sampleData}
-              xKey="date"
-              yKey="balance"
-              fillColor="#bbf7d0"
-              strokeColor="#16a34a"
-            />
+          <div className="w-full lg:w-[50%]  bg-[#fff] rounded-lg p-4">
+            <p className="font-semibold">Account Balance</p>
+            <div className="w-full ">
+              <CustomAreaChart
+                data={sampleData}
+                xKey="date"
+                yKey="balance"
+                fillColor="#bbf7d0"
+                strokeColor="#16a34a"
+              />
+            </div>
           </div>
           <div className="w-full h-[400px] bg-[#fff] rounded-lg">
             <CustomBarChart data={dailyIncomeExpenceData?.getDailyIncomeExpense} xKey={'date'} />
@@ -288,7 +291,7 @@ const Overview = () => {
               />
             </div>
             {
-              incomeByCategories?.getIncomeByCategories.map(({categoryName, totalAmount, transactionCount}) => (
+              incomeByCategories?.getIncomeByCategories.map(({ categoryName, totalAmount, transactionCount }) => (
                 <div className="flex items-center justify-between mt-4">
                   <div className="flex-1 flex items-center gap-2">
                     <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full text-white bg-green-app">{categoryName.charAt(0).toUpperCase()}</div>
@@ -303,17 +306,17 @@ const Overview = () => {
           <div className="w-full lg:w-[50%] bg-[#fff] rounded-lg p-4">
             <p className="font-semibold">Total Expense</p>
             <div className="w-full">
-                <CustomPieChart
-                  data={expensePieChartData}
-                  outerRadius={100}
-                  fill="#f14c52"
-                  dataKey="totalAmount"
-                  label={true}
-                // showLegend={true}
-                />
+              <CustomPieChart
+                data={expensePieChartData}
+                outerRadius={100}
+                fill="#f14c52"
+                dataKey="totalAmount"
+                label={true}
+              // showLegend={true}
+              />
             </div>
             {
-              expenseByCategories?.getExpenseByCategories.map(({categoryName, totalAmount, transactionCount}) => (
+              expenseByCategories?.getExpenseByCategories.map(({ categoryName, totalAmount, transactionCount }) => (
                 <div className="flex items-center justify-between mt-4">
                   <div className="flex-1 flex items-center gap-2">
                     <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full text-white bg-red-app">{categoryName.charAt(0).toUpperCase()}</div>

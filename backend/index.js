@@ -33,7 +33,7 @@ app.use(
   "/graphql",
   cookieParser(),
   cors({
-    origin: "http://localhost:3001", // Adjust your frontend's origin here
+    origin: "http://localhost:5000", // Adjust your frontend's origin here
     credentials: true,  // Allows cookies to be sent
   }),
   express.json(),
