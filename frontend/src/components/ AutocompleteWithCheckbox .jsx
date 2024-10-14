@@ -3,7 +3,7 @@ import { Autocomplete, TextField, Checkbox } from "@mui/material";
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-const AutocompleteWithCheckbox  = ({ allCategories, setTransactionFilter}) => {
+const AutocompleteWithCheckbox = ({ allCategories, setTransactionFilter }) => {
   // Icon for unchecked and checked checkboxes
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -12,15 +12,15 @@ const AutocompleteWithCheckbox  = ({ allCategories, setTransactionFilter}) => {
     console.log(newValue);
     const categorieIds = newValue.map((value) => value._id)
     setTransactionFilter((prv) => {
-      return {...prv, categoryIds: categorieIds}
+      return { ...prv, categoryIds: categorieIds }
     })
   };
 
   return (
     <Autocomplete
-      multiple // Enable multiple selection
+      multiple
       options={allCategories || []}
-      disableCloseOnSelect // Prevent dropdown from closing after selecting an option
+      disableCloseOnSelect
       getOptionLabel={(option) =>
         option ? `${option.name} (${option.categoryType})` : ""
       }
@@ -54,8 +54,16 @@ const AutocompleteWithCheckbox  = ({ allCategories, setTransactionFilter}) => {
           }}
         />
       )}
+      renderTags={(value, getTagProps) => {
+        // Custom tag rendering: show "+X selected" where X is the number of selected items
+        if (value.length > 0) {
+          return `+${value.length} categories selected`;
+        }
+        return null;
+      }}
     />
+
   );
 };
 
-export default AutocompleteWithCheckbox ;
+export default AutocompleteWithCheckbox;
