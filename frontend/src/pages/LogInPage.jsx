@@ -43,7 +43,6 @@ const LogInPage = () => {
             input: formData,
           },
         })
-        console.log("logged in successfully");
       } catch(error) {
         console.log("error", error);
       }

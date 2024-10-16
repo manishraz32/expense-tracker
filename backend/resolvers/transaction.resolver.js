@@ -12,7 +12,6 @@ const transactionResolvers = {
             try {
                 // Create the filter object
                 const { categoryIds, minAmount, maxAmount } = filterVal;
-                console.log("filterVal", filterVal);
                 let filter = {};
                 // Filter by categoryIds if provided
                 if (categoryIds && categoryIds.length > 0) {
@@ -54,7 +53,6 @@ const transactionResolvers = {
             // Calculate the balance for each date
             for (const transaction of transactions) {
                 const transactionDate = format(transaction.createdAt, 'yyyy-MM-dd');
-                console.log("transactionDate", transactionDate)
                 if (transaction.transactionType === 'INCOME') {
                     balance += transaction.amount;
                 } else if (transaction.transactionType === 'EXPENSE') {
@@ -70,7 +68,6 @@ const transactionResolvers = {
                 }
             }
 
-            console.log('Generated account data:', accountData);
             return accountData;
         },
         getDailyIncomeExpense: async (_, { walletId, startDate, endDate }) => {
@@ -133,7 +130,6 @@ const transactionResolvers = {
                     transactionDate: { $gte: new Date(startDate), $lte: new Date(endDate) },
                 }).populate('categoryId');
 
-                console.log("transactions", transactions);
                 const datas = [];
 
                 transactions.forEach((transaction) => {
@@ -141,7 +137,6 @@ const transactionResolvers = {
                     let categoryData = datas.filter((data) => {
                         return categoryName === data.categoryName;
                     });
-                    console.log("categoryData", categoryData);
                     if (categoryData.length > 0) {
                         categoryData[0].transactionCount = categoryData[0].transactionCount + 1;
                         categoryData[0].totalAmount = categoryData[0].totalAmount + transaction.amount;
@@ -167,7 +162,6 @@ const transactionResolvers = {
                     transactionDate: { $gte: new Date(startDate), $lte: new Date(endDate) },
                 }).populate('categoryId');
 
-                console.log("transactions", transactions);
                 const datas = [];
 
                 transactions.forEach((transaction) => {
@@ -175,7 +169,6 @@ const transactionResolvers = {
                     let categoryData = datas.filter((data) => {
                         return categoryName === data.categoryName;
                     });
-                    console.log("categoryData", categoryData);
                     if (categoryData.length > 0) {
                         categoryData[0].transactionCount = categoryData[0].transactionCount + 1;
                         categoryData[0].totalAmount = categoryData[0].totalAmount + transaction.amount;
@@ -247,7 +240,6 @@ const transactionResolvers = {
 
                 // update the budget if the transaction belong to  budget categories
                 if (transactionType === 'EXPENSE') {
-                    console.log("walletId: ", walletId);
                   
                     // Find budget by walletId and ensure the transaction date is within the budget period
                     const budget = await Budget.findOne({
@@ -257,10 +249,8 @@ const transactionResolvers = {
                     });
                   
                     if (budget) {
-                      console.log("budget: ", budget);
                   
                       const categories = budget.categories;
-                      console.log("categories", categories);
                   
                       // Check if the category exists in the budget's categories
                       if (categories.includes(categoryId)) {

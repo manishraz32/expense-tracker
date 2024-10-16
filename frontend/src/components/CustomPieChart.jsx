@@ -12,7 +12,6 @@ const CustomPieChart = ({
   label = false,
 }) => {
 
-  console.log("customData", data);
   return (
     <ResponsiveContainer width="100%" height={300}>
       <PieChart>

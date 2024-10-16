@@ -25,10 +25,8 @@ const BudgetPage = () => {
         variables: { userId: user?._id }
     });
 
-    console.log("budgetsData", budgetsData);
 
     useEffect(() => {
-        console.log(budgetsData);
         let currentBudget = null;
         if (budgetsData?.getBudgetsByUser?.length > 0) {
             setBudget(budgetsData.getBudgetsByUser[0]);
@@ -36,13 +34,11 @@ const BudgetPage = () => {
         }
         const total = currentBudget?.amount;
         const spent = currentBudget?.spentSoFar;
-        console.log("total spent", total, spent);
         if(total == 0) {
             setPercentage(0);
             return;
         }
         const precent = (spent / total) * 100;
-        console.log(precent);
         setPercentage(precent);
     }, [budgetsData])
 
@@ -88,8 +84,6 @@ const BudgetPage = () => {
                 },
             });
             toast.success("Budget create successfully");
-            typeFromAST
-            console.log('Budget created:', response.data.createBudget);
         } catch (err) {
             console.error('Error creating budget:', err);
         }

@@ -39,16 +39,13 @@ const Overview = () => {
     variables: queryVariables
   });
 
-  console.log("incomeBycategories", incomeByCategories);
   useEffect(() => {
     const incomePieChartData = incomeByCategories?.getIncomeByCategories?.map((data) => {
-      console.log("data1", data);
       return { name: data.categoryName, totalAmount: data.totalAmount }
     })
     const expensePieChartData = expenseByCategories?.getExpenseByCategories?.map((data) => {
       return { name: data.categoryName, totalAmount: data.totalAmount }
     })
-    // console.log("data", incomePieChartData);
     setIncomePieChartData(incomePieChartData);
     setExpensePieChartData(expensePieChartData);
 
@@ -82,7 +79,6 @@ const Overview = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("formData", formData);
     try {
       await createTransaction({
         variables: {
@@ -121,7 +117,6 @@ const Overview = () => {
   };
 
   const handleIncomeSubmit = async () => {
-    console.log("formData", incomeFormData);
     try {
       await createTransaction({
         variables: {

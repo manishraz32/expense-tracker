@@ -3,7 +3,6 @@ import { ValidationError } from 'apollo-server-express'; // Apollo's built-in er
 import User from '../models/user.model.js'
 // Validate wallet input data
 const validateWalletInput = async (input) => {
-  console.log("walletinput2", input);
   const { walletName, userId, initialBalance } = input;
 
   try {

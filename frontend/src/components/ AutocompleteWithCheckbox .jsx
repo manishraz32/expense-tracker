@@ -9,7 +9,6 @@ const AutocompleteWithCheckbox = ({ allCategories, setTransactionFilter }) => {
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
   const handleChange = (event, newValue) => {
-    console.log(newValue);
     const categorieIds = newValue.map((value) => value._id)
     setTransactionFilter((prv) => {
       return { ...prv, categoryIds: categorieIds }

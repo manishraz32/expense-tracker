@@ -22,7 +22,6 @@ const Home = () => {
     maxAmount: null,
     minAmount: null
   })
-  console.log("transactionFilter", transactionFilter);
   // Query
   const { data, error, loading } = useQuery(GET_WALLET_BY_ID, {
     variables: { id: user?.wallet?._id }
@@ -43,7 +42,6 @@ const Home = () => {
     refetch({ filter: transactionFilter });
   }, [transactionFilter, refetch]);
 
-  console.log("income categories", incomeCategoriesData);
 
   // muatation 
   const [createTransaction, { loading: createTransLoading }] = useMutation(ADD_EXPENCE_TRANSACTION, {
@@ -53,7 +51,6 @@ const Home = () => {
     ],
   });
 
-  console.log("transactionData", transactionData);
 
   // add expense transaction
   const [open, setOpen] = useState(false);
@@ -72,7 +69,6 @@ const Home = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("formData", formData);
     try {
       await createTransaction({
         variables: {
@@ -112,7 +108,6 @@ const Home = () => {
   };
 
   const handleIncomeSubmit = async () => {
-    console.log("formData", incomeFormData);
     try {
       await createTransaction({
         variables: {
@@ -144,9 +139,6 @@ const Home = () => {
 
 
   
-  console.log("data", data);
-  const categories = ['Food', 'Transportation', 'Shopping', 'Health', 'Education'];
-  const categories1 = ['Food1', 'Transportation1', 'Shopping1', 'Health1', 'Education1'];
   return (
     <div className="flex flex-col gap-4 flex-grow px-[16px] py-4 bg-[#F4F7FA] xl:px-[15%]">
       <div className="flex flex-col gap-4 lg:flex-row">

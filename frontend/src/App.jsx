@@ -20,18 +20,15 @@ function App() {
   }
   let isAuthenticate = Boolean(data?.authUser);
   if (isAuthenticate) {
-    console.log("authUser");
     localStorage.setItem("user", JSON.stringify(data.authUser));
   } else {
     localStorage.clear();
 
-    console.log('localStorage after clear:', localStorage);
 
   }
   if (error) {
     isAuthenticate = false;
   }
-  console.log("isAuthenticate", isAuthenticate);
   return (
     <div className="flex flex-col min-h-screen">
       <Toaster position="top-right" />

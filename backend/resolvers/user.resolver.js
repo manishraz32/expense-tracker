@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken';
 const userResolver = {
   Mutation: {
     signUp: async (_, { input }, context) => {
-      console.log("input", input);
       try {
         const { username, name, email, password, confirmPassword } = input;
 

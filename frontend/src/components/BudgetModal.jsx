@@ -29,7 +29,6 @@ const BudgetModal = ({ open, onClose, onSubmit, formData, setFormData, title, ca
   };
 
   const handleCategoryChange = (event, value) => {
-    console.log("value", value);
     setFormData((prev) => ({
       ...prev,
       categories: value,
@@ -49,7 +48,6 @@ const BudgetModal = ({ open, onClose, onSubmit, formData, setFormData, title, ca
   };
 
   const handleSubmit = () => {
-    console.log("formData", formData);
     if (validateForm()) {
       onSubmit(); 
     }
