@@ -221,10 +221,10 @@ const Home = () => {
        <BalanceStatusCard/>
       </div>
       <div className="bg-white rounded-lg p-[15px] flex flex-col gap-2">
-        <div className="flex justify-between">
+        {/* <div className="flex justify-between">
           <p className="text-sm text-gray-925">Sept 16, 2024</p>
           <p className="text-sm text-gray-550 font-bold">37000</p>
-        </div>
+        </div> */}
         <div className="flex flex-col gap-4 md:flex-row md:flex-wrap">
           {transactionData?.getTransactions?.map((transaction) => (
             <div className="flex py-2 flex-auto justify-between rounded-md border border-soldi border-gray-400 items-center lg:w-[45%] px-4">
