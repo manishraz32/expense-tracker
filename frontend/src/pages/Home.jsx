@@ -208,19 +208,20 @@ const Home = () => {
         <div className="flex flex-col w-full  lg:flex-row gap-4">
           <div className="w-full flex flex-col lg:w-[30%]">
             <label className="text-sm text-gray-450 mb-1">By Category</label>
-            <AutocompleteWithCheckbox
-              allCategories={allCategories?.getCategories || []}
-              setTransactionFilter={setTransactionFilter}
-            />
-          </div>
-          <div className="w-full flex flex-col lg:w-[30%]">
-            <label className="text-sm text-gray-450 mb-1">By amount</label>
-              <PriceSlider
-                min={-1000}
-                max={5000}
+              <AutocompleteWithCheckbox
+                allCategories={allCategories?.getCategories || []}
                 setTransactionFilter={setTransactionFilter}
               />
           </div>
+          {/* <div className="w-full flex flex-col lg:w-[30%]">
+            <label className="text-sm text-gray-450 mb-1">By amount</label>
+                <PriceSlider
+                   min={-1000}
+                   max={5000}
+                   setTransactionFilter={setTransactionFilter}
+                 />
+           
+          </div> */}
         </div>
 
       </div>

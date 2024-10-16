@@ -159,7 +159,7 @@ const BudgetPage = () => {
                 <div className="text-gray-925 text-lg">Budget progress</div>
                 <div className="flex w-full justify-center">
                     <div className="flex flex-col gap-10 w-[60%]">
-                        <div className="text-center text-gray-925">Keep spending You can spend <span className="text-black text-lg font-semibold">16.13 INR</span> each day for the rest of the period.</div>
+                        <div className="text-center text-gray-925">Keep spending You can spend <span className="text-black text-lg font-semibold">{budget?.dailyLimit.toFixed(2)} INR</span> each day for the rest of the period.</div>
                         <CommonProgressBar value={precentage} />
                     </div>
                 </div>

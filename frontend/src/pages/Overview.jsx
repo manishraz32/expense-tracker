@@ -259,9 +259,9 @@ const Overview = () => {
       <div className="flex gap-5 overflow-auto px-[-16px]">
         <BalanceStatusCard />
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4 lg:flex-row">
-          <div className="w-full lg:w-[50%]  bg-[#fff] rounded-lg p-4">
+          {/* <div className="w-full lg:w-[50%]  bg-[#fff] rounded-lg p-4">
             <p className="font-semibold">Account Balance</p>
             <div className="w-full ">
               <CustomAreaChart
@@ -272,9 +272,10 @@ const Overview = () => {
                 strokeColor="#16a34a"
               />
             </div>
-          </div>
-          <div className="w-full h-[400px] bg-[#fff] rounded-lg">
-            <CustomBarChart data={dailyIncomeExpenceData?.getDailyIncomeExpense} xKey={'date'} />
+          </div> */}
+          <div className="w-full bg-[#fff] rounded-lg p-4">
+          <p className="font-semibold my-4">Changes</p>
+            <CustomBarChart data={dailyIncomeExpenceData?.getDailyIncomeExpense} xKey={'date'} height={450}/>
           </div>
         </div>
         <div className="flex flex-col gap-4 lg:flex-row">
