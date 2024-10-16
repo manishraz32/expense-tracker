@@ -33,7 +33,7 @@ app.use(
   "/graphql",
   cookieParser(),
   cors({
-    origin: "http://localhost:5000", // Adjust your frontend's origin here
+    origin: "http://localhost:4000", // Adjust your frontend's origin here
     credentials: true,  // Allows cookies to be sent
   }),
   express.json(),
@@ -46,11 +46,12 @@ app.use(
 );
 
 
-// Health check route
-app.get('/health', (req, res) => {
-  res.status(200).send('OK');
-});
+app.use(express.static(path.join(__dirname, "frontend/dist")));
 
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
+});
 
 
 // Modified server startup
