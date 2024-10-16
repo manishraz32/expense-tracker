@@ -5,7 +5,8 @@ import { CREATE_WALLET } from '../graphql/mutations/wallet.mutations';
 
 const WalletPage = () => {
     const [createWallet, { loading }] = useMutation(CREATE_WALLET);
-    const _id = JSON.parse(localStorage.getItem('user'))._id;
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log("user", user.wallet);
     const [walletFormData, setWalletFormData] = useState({
         walletName: "",
         initialBalance: ""
@@ -48,7 +49,7 @@ const WalletPage = () => {
                         input: {
                             walletName: walletFormData.walletName,
                             initialBalance: parseFloat(walletFormData.initialBalance),
-                            userId: _id
+                            userId: user._id
                         },
                     },
                 });
@@ -129,10 +130,10 @@ const WalletPage = () => {
                     <div className="flex flex-col gap-4">
                         <div className="text-sm font-semibold text-gray-925">Wallet Member</div>
                         <div className="flex gap-4 items-center">
-                            <div className="w-10 h-10 rounded-full bg-gray-400"></div>
+                            <div className="w-10 h-10 rounded-full bg-gray-400 flex justify-center items-center text-white text-lg">{user?.name.toUpperCase().charAt(0)}</div>
                             <div className="flex flex-col">
-                                <p className="text-sm text-gray-925">Manish Kumar Prasad</p>
-                                <p className="text-gray-450 text-sm">manishraz32@gmail.com</p>
+                                <p className="text-sm text-gray-925">{user?.name}</p>
+                                <p className="text-gray-450 text-sm">{user?.email}</p>
                             </div>
                         </div>
                     </div>
