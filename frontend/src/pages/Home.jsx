@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import PlusIcon from '../assets/PlusIcon';
 import AutocompleteWithCheckbox from '../components/ AutocompleteWithCheckbox ';
 import CommonDialog from '../components/CommonDialog ';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_WALLET_BY_ID } from '../graphql/queries/wallet.query';
-import WalletBalanceCard from '../components/WalletBalanceCard';
 import { GET_CATEGORIES, GET_EXPENSE_CATEGORIES, GET_INCOME_CATEGORIES } from '../graphql/queries/category.query';
 import { GET_TRANSACTIONS } from '../graphql/queries/transaction.query';
 import { ADD_EXPENCE_TRANSACTION } from '../graphql/mutations/transaction.mutation';
 import toast from 'react-hot-toast'
-import PriceSlider from '../components/PriceSlider';
 import { Autocomplete, TextField } from '@mui/material';
 import BalanceStatusCard from '../components/BalanceStatusCard';
 
