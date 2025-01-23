@@ -23,7 +23,7 @@ const Overview = () => {
   const [incomePieChartData, setIncomePieChartData] = useState([]);
   const [expensePieChartData, setExpensePieChartData] = useState([]);
 
-  const queryVariables = { walletId: user.wallet._id, startDate, endDate, };
+  const queryVariables = { walletId: user?.wallet?._id, startDate, endDate, };
 
   const { data: expenseCategoresData, error: expenseError, loading: expenseLoading } = useQuery(GET_EXPENSE_CATEGORIES)
   const { data: incomeCategoriesData, error: incomeError, loading: loadingError } = useQuery(GET_INCOME_CATEGORIES);
@@ -87,7 +87,7 @@ const Overview = () => {
             categoryId: formData.category._id,
             transactionDate: formData.date,
             amount: parseFloat(formData.amount),
-            userId: user._id,
+            userId: user?._id,
             walletId: user?.wallet?._id
           }
         }
