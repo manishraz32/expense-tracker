@@ -65,14 +65,14 @@ const userResolver = {
           name: newUser.name,
           username: newUser.username,
           email: newUser.email,
-          wallet: null // No wallet yet for a new user
+          wallet: null 
         };
 
         return userWithoutPassword;
       } catch (err) {
         console.error("Error in signUp: ", err);
         if (!context.res.headersSent) {
-          context.res.status(500); // Internal server error for unexpected issues
+          context.res.status(500); 
         }
         throw new Error(err.message || "Internal server error");
       }
